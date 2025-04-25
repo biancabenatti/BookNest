@@ -31,18 +31,18 @@ export const getLivrosById = async (req, res) => {
 // POST - Criar novo livro
 export const createLivro = async (req, res) => {
     try {
-        const { codigo_isbn, titulo, capa, avaliacao, autor } = req.body
+        const { titulo, avaliacao, autor, data_leitura, descricao } = req.body
         const db = req.app.locals.db
 
-        const existeLivro = await db.collection('livros').findOne({ codigo_isbn })
-
-        if (existeLivro) {
-            return res.status(409).json({ error: true, message: "Já existe um livro com o código ISBN informado!" })
+        const novoLivro = {
+            titulo,
+            avaliacao,
+            autor,
+            data_leitura: data_leitura ? new Date(data_leitura) : null,
+            descricao
         }
 
-        const novoLivro = { codigo_isbn, titulo, capa, avaliacao, autor }
         const result = await db.collection('livros').insertOne(novoLivro)
-
         res.status(201).json({ _id: result.insertedId, ...novoLivro })
     } catch (error) {
         console.error('Erro ao criar livro', error)
@@ -54,12 +54,20 @@ export const createLivro = async (req, res) => {
 export const updateLivro = async (req, res) => {
     try {
         const { id } = req.params
-        const { codigo_isbn, titulo, capa, avaliacao, autor } = req.body
+        const { titulo, avaliacao, autor, data_leitura, descricao } = req.body
         const db = req.app.locals.db
 
         const result = await db.collection('livros').updateOne(
             { _id: ObjectId.createFromHexString(id) },
-            { $set: { codigo_isbn, titulo, capa, avaliacao, autor } }
+            {
+                $set: {
+                    titulo,
+                    avaliacao,
+                    autor,
+                    data_leitura: data_leitura ? new Date(data_leitura) : null,
+                    descricao
+                }
+            }
         )
 
         if (result.matchedCount === 0) {

@@ -406,42 +406,6 @@ header {
     margin-bottom: 2rem;
 }
 
-input[type="file"] {
-    display: none;
-}
-
-
-.custom-file-upload {
-    display: inline-block;
-    padding: 0.6rem 1.2rem;
-    background-color: #19788b;
-    color: white;
-    border-radius: 0.4rem;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.custom-file-upload:hover {
-    background-color: #145c6b;
-}
-
-
-#file-name {
-    display: block;
-    margin-top: 0.8rem;
-    font-size: 1rem;
-    font-weight: 500;
-    color: white;
-}
-
-.custom-file {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    justify-content: center;
-    margin-bottom: 2.5rem;
-}
-
 #salvarLivro {
     border: solid 2px;
     border-color: rgba(255, 255, 255, 0.15);

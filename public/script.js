@@ -1,25 +1,33 @@
+// Função para carregar livros
+async function carregarLivros() {
+    try {
+        const resposta = await fetch('http://localhost:3000/api/livros');
+        const livros = await resposta.json();
+        exibirLivros(livros);
+    } catch (erro) {
+        console.error('Erro ao carregar livros:', erro);
+    }
+}
 
-const livros = [
-    { titulo: 'O Senhor dos Anéis', categoria: 'Ficção', imagem: '/img/Livro1.webp', estrelas: 0 },
-    { titulo: 'A Breve História do Tempo', categoria: 'Ciência', imagem: '/img/Livro2.jpg', estrelas: 0 },
-    { titulo: 'A História de Roma', categoria: 'História', imagem: '/img/Livro1.webp', estrelas: 3 },
-];
+carregarLivros();
 
 // Função para exibir os livros
-function exibirLivros(categoriaFiltro = '') {
+function exibirLivros(livros = [], categoriaFiltro = '') {
     const livrosLista = document.getElementById('livrosLista');
-    livrosLista.innerHTML = ''; // Limpa a lista antes de adicionar
+    livrosLista.innerHTML = '';
 
-    // Filtra os livros pela categoria se especificada
-    const livrosFiltrados = categoriaFiltro ? livros.filter(livro => livro.categoria === categoriaFiltro) : livros;
+    const livrosFiltrados = categoriaFiltro
+        ? livros.filter(livro => livro.categoria === categoriaFiltro)
+        : livros;
 
     livrosFiltrados.forEach(livro => {
         const livroDiv = document.createElement('div');
         livroDiv.classList.add('livro');
 
         livroDiv.innerHTML = `
-            <img src="${livro.imagem}" alt="Capa do livro">
             <h3>${livro.titulo}</h3>
+            <p><strong>Descrição:</strong> ${livro.descricao || ''}</p>
+            <p><strong>Data de Leitura:</strong> ${livro.data_leitura || ''}</p>
             <div class="star-rating" data-titulo="${livro.titulo}" onclick="alterarEstrelas(event, '${livro.titulo}')">
                 ${[1, 2, 3, 4, 5].map(i => `
                     <i class="fa fa-star ${livro.estrelas >= i ? 'checked' : ''}" data-estrela="${i}"></i>
@@ -33,16 +41,13 @@ function exibirLivros(categoriaFiltro = '') {
         livrosLista.appendChild(livroDiv);
     });
 }
-document.getElementById("capa").addEventListener("change", function() {
-    let fileName = this.files.length > 0 ? this.files[0].name : "Nenhum arquivo selecionado";
-    document.getElementById("file-name").textContent = fileName;
-});
 
+// Função para remover livro
 function removerLivro(titulo) {
     const index = livros.findIndex(livro => livro.titulo === titulo);
     if (index !== -1) {
         livros.splice(index, 1);
-        exibirLivros(); // Atualiza a lista
+        exibirLivros(livros);
     }
 }
 
@@ -54,73 +59,81 @@ function alterarEstrelas(event, titulo) {
     if (estrela.tagName === 'I') {
         const novaClass = estrela.getAttribute('data-estrela');
         livro.estrelas = parseInt(novaClass);
-
-        exibirLivros(); // Recarregar a lista de livros com a nova classificação
+        exibirLivros(livros);
     }
 }
 
-// Função para salvar o livro 
-document.getElementById('salvarLivro').addEventListener('click', () => {
-    const titulo = document.getElementById('titulo').value;
-    const imagem = document.getElementById('capa').files[0];
-    const categoria = document.getElementById('categoria').value;
-    const avaliacao = parseInt(document.getElementById('avaliacao').value);
+// Função para salvar um novo livro
+document.getElementById('salvarLivro').addEventListener('click', async () => {
+  const payload = {
+    titulo: document.getElementById('titulo').value,
+    autor:  document.getElementById('autor').value,
+    categoria: document.getElementById('categoria').value,
+    avaliacao: parseFloat(document.getElementById('avaliacao').value),
+    data_leitura: document.getElementById('dataLeitura').value,
+    descricao: document.getElementById('descricao').value
+  };
 
-    if (!titulo || !imagem || !categoria || isNaN(avaliacao)) {
-        alert('Preencha todos os campos');
-        return;
+  // validação simples
+  if (!payload.titulo || !payload.autor || isNaN(payload.avaliacao) 
+      || !payload.categoria || !payload.data_leitura || !payload.descricao) {
+    return alert('Preencha todos os campos');
+  }
+
+  try {
+    const res = await fetch('http://localhost:3000/api/livros', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    let result = {}
+    if (res.headers.get('content-length') > 0) {
+      result = await res.json();
     }
 
-    const novoLivro = {
-        titulo,
-        imagem: URL.createObjectURL(imagem), // Utiliza a URL da imagem temporária
-        categoria,
-        estrelas: avaliacao,
-        concluido: false,
-    };
-
-    livros.push(novoLivro);
-    exibirLivros();
-    document.getElementById('modal').style.display = 'none'; // Fecha o modal
+    if (res.ok) {
+      alert('Livro salvo com sucesso!');
+      document.getElementById('modal').style.display = 'none';
+      carregarLivros();
+    } else {
+      alert('Erro: ' + (result.message || res.statusText));
+    }
+  } catch (err) {
+    console.error('Fetch error:', err);
+    alert('Erro ao salvar livro');
+  }
 });
 
-// Função para abrir o modal de adicionar livro
+// Modal
 const modal = document.getElementById("modal");
 const btnAbrir = document.getElementById("btnAdicionarLivro");
 const btnFechar = document.querySelector(".close");
 
 btnAbrir.addEventListener("click", () => {
-    modal.style.display = "block";
-});
-
-btnAbrir.addEventListener("click", () => {
-    // Limpar os campos do modal
     document.getElementById('titulo').value = '';
-    document.getElementById('capa').value = '';
-    document.getElementById('categoria').value = '';
+    document.getElementById('autor').value = '';
     document.getElementById('avaliacao').value = '';
-    document.getElementById("file-name").textContent = "Nenhum arquivo selecionado";
+    document.getElementById('categoria').value = '';
+    document.getElementById('dataLeitura').value = '';
+    document.getElementById('descricao').value = '';
 
     modal.style.display = "block";
 });
 
-// Fechar o modal ao clicar no "X"
 btnFechar.addEventListener("click", () => {
     modal.style.display = "none";
 });
 
-// Fechar o modal ao clicar fora dele
 window.addEventListener("click", (event) => {
     if (event.target === modal) {
         modal.style.display = "none";
     }
 });
 
-// Filtra os livros ao selecionar uma categoria no dropdown
-document.getElementById('categoriaFiltro').addEventListener('change', (e) => {
-    exibirLivros(e.target.value);
+// Filtro de categoria
+document.getElementById('categoriaFiltro').addEventListener('change', e => {
+    carregarLivros().then(() => {
+        const livros = Array.from(document.querySelectorAll('.livro'));
+    });
 });
-
-// Exibe todos os livros ao carregar a página
-exibirLivros();
-

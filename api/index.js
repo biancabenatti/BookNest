@@ -1,21 +1,27 @@
-
 import express from 'express'
+import cors from 'cors'
 import 'dotenv/config'
 import { connectToDatabase } from './config/db.js'
 import livrosRoutes from './routes/livros.js'
  
-//import fs from 'fs' //fs = file system
- 
 const app = express()
 const PORT = process.env.PORT || 3000
-app.use(express.json()) //parse do JSON
-//rota publica
+
+// Habilita CORS para todas as origens (desenvolvimento)
+app.use(cors())
+
+app.use(express.json()) // parse do JSON
+
+// rota publica
 app.use('/', express.static('public'))
-//Rota
+
+// Rotas da API de livros
 app.use('/api/livros', livrosRoutes)
-//define o favicon
+
+// favicon
 app.use('/favicon.ico', express.static('public/images/pesquisa.png'))
-//start the serve
+
+// Conecta ao MongoDB e inicia o servidor
 connectToDatabase(app).then(() => {
     app.listen(PORT, () => {
         console.log(`Servidor rodando na porta ${PORT}!`)

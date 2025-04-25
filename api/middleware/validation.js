@@ -27,9 +27,15 @@ export const validateLivro = [
         .optional()
         .isFloat({ min: 0, max: 10 }).withMessage('A avaliação deve ser um número entre 0 e 10'),
 
-    check('capa')
+
+    check('data_leitura')
         .optional()
-        .isURL().withMessage('A capa deve ser uma URL válida, se fornecida'),
+        .isISO8601().withMessage('A data de leitura deve estar no formato ISO (YYYY-MM-DD)'),
+
+    check('descricao')
+        .optional()
+        .isString().withMessage('A descrição deve ser uma string')
+        .isLength({ min: 10 }).withMessage('A descrição deve ter pelo menos 10 caracteres'),
 
     validateRequest
 ]
