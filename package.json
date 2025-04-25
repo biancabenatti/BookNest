@@ -1,0 +1,23 @@
+{
+  "name": "mongogeo",
+  "version": "1.0.0",
+  "description": "Mongogeo",
+  "main": "api/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./api/index.js",
+    "dev": "nodemon ./api/index.js"
+  },
+  "author": "Bianca Benatti",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-validator": "^7.2.1",
+    "mongodb": "^6.14.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}

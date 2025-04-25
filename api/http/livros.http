@@ -1,0 +1,56 @@
+// API REST de Municipios 
+@baseURL = http://localhost:3000/api/livros
+@id = 67f473c264bfbda4d0c6d1d9
+
+###
+GET {{baseURL}}/{{id}}
+Content-Type: application/json
+
+###
+// POST - insere um novo municipio
+POST {{baseURL}}
+Content-Type: application/json
+
+ { 
+  "titulo": "O Senhor dos Anéis",
+  "capa": "https://example.com/imagens/senhor_dos_aneis.jpg",
+  "avaliacao": 4.5,
+  "autor": "J.R.R. Tolkien"
+  }
+
+
+# GET todos os livros
+GET http://localhost:3000/api/livros
+Content-Type: application/json
+
+###
+# POST cria um livro
+POST http://localhost:3000/api/livros
+Content-Type: application/json
+
+{
+  "codigo_isbn": 1234567,
+  "titulo": "Meu Livro Teste",
+  "capa": "https://url-da-imagem.jpg",
+  "avaliacao": 8.5,
+  "autor": "Fulano de Tal"
+}
+
+###
+
+# PUT atualiza o livro (substitua :id por um _id válido retornado no POST)
+PUT http://localhost:3000/api/livros/:id
+Content-Type: application/json
+
+{
+  "codigo_isbn": 7654321,
+  "titulo": "Título Atualizado",
+  "capa": "https://outra-imagem.jpg",
+  "avaliacao": 9,
+  "autor": "Fulano Editado"
+}
+
+###
+
+# DELETE remove o livro
+DELETE http://localhost:3000/api/livros/:id
