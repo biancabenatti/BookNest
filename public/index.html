@@ -14,7 +14,6 @@
                 <ul>
                     <li><a href="#intro">Início</a></li>
                     <li><a href="#catalogo">Catálogo</a></li>
-                    <li><a href="#sobre">Sobre</a></li>
                 </ul>
             </nav>
         </div>
@@ -56,54 +55,54 @@
     </section>
 
     <!-- Modal para Adicionar Novo Livro -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Adicionar Novo Livro</h2>
-            <div class="modal-titulo">
-                <label for="titulo">Título do Livro</label>
-                <input type="text" id="titulo">
-            </div>
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Adicionar Novo Livro</h2>
 
-            <div class="modal-avaliacao">
-                <label for="categoria">Categoria</label>
-                <select id="categoria">
-                    <option value="ficcao">Ficção</option>
-                    <option value="ciencia">Ciência</option>
-                    <option value="historia">História</option>
-                </select>
-                <label>Avaliação</label>
-                <input type="number" id="avaliacao" min="0" max="5">
-            </div>
-            <div class="custom-file">
-                <label for="capa" class="custom-file-upload">
-                    📁 Escolher uma imagem
-                </label>
-                <input type="file" id="capa" accept="image/*">
-                <span id="file-name">Nenhum arquivo selecionado</span>
-            </div>
-            <button id="salvarLivro">Salvar</button>
+        <div class="modal-titulo">
+            <label for="titulo">Título do Livro</label>
+            <input type="text" id="titulo">
         </div>
+
+        <div class="modal-autor">
+            <label for="autor">Autor</label>
+            <input type="text" id="autor">
+
+            <label for="avaliacao">Avaliação</label>
+            <input type="number" id="avaliacao" min="0" max="5">
+        </div>
+
+    
+        <div class="modal-avaliacao">
+            <label for="categoria">Categoria</label>
+            <select id="categoria">
+                <option value="ficcao">Ficção</option>
+                <option value="ciencia">Ciência</option>
+                <option value="historia">História</option>
+            </select>
+
+            
+                <label for="dataLeitura">Data de Leitura</label>
+                <input type="date" id="dataLeitura">
+           
+        </div>
+
+        <div class="modal-descricao">
+            <textarea id="descricao" rows="3" placeholder="Digite uma breve descrição..."></textarea>
+        </div>
+
+        <div class="custom-file">
+            <label for="capa" class="custom-file-upload">
+                📁 Escolher uma imagem
+            </label>
+            <input type="file" id="capa" accept="image/*">
+            <span id="file-name">Nenhum arquivo selecionado</span>
+        </div>
+
+        <button id="salvarLivro">Salvar</button>
     </div>
-
-
-    <section id="sobre" class="style3">
-        <div class="sobre">
-            <h2>Sobre a Biblioteca Virtual</h2>
-            <p>Somos uma plataforma dedicada ao armazenamento de avaliações de livros já lidos. 
-                Nosso objetivo é proporcionar um espaço onde os usuários possam registrar suas 
-                impressões sobre as obras que consumiram, criando um histórico de leituras.</p>
-            <p>Este projeto foi desenvolvido para fins acadêmicos, como parte do trabalho da disciplina de Banco de Dados Não Relacional do curso de Desenvolvimento de Software Multiplataforma da FATEC Votorantim.</p>
-
-            <h3>Avaliações de Livros</h3>
-            <p>Nossa plataforma permite que os usuários cataloguem suas leituras, adicionem uma imagem da capa e atribuam notas aos livros que já leram. Dessa forma, 
-                facilitamos o compartilhamento de experiências literárias e auxiliamos na descoberta de novas obras de interesse.</p>
-        </div>
-    </section>
-
-    <footer>
-        <p>&copy; 2025 Biblioteca Online</p>
-    </footer>
+</div>
 
     <script src="script.js"></script>
 
