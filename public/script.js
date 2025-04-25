@@ -1,17 +1,27 @@
-// Função para carregar livros
+let livros = [];
+
 async function carregarLivros() {
     try {
-        const resposta = await fetch('http://localhost:3000/api/livros');
-        const livros = await resposta.json();
+        const res = await fetch('http://localhost:3000/api/livros');
+        const data = await res.json();
+        livros = data;
+        console.log(livros);
         exibirLivros(livros);
-    } catch (erro) {
-        console.error('Erro ao carregar livros:', erro);
+    } catch (err) {
+        console.error('Erro ao carregar livros:', err);
     }
 }
 
 carregarLivros();
 
-// Função para exibir os livros
+function formatDateBR(isoString) {
+    const d = new Date(isoString);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
+}
+
 function exibirLivros(livros = [], categoriaFiltro = '') {
     const livrosLista = document.getElementById('livrosLista');
     livrosLista.innerHTML = '';
@@ -25,15 +35,18 @@ function exibirLivros(livros = [], categoriaFiltro = '') {
         livroDiv.classList.add('livro');
 
         livroDiv.innerHTML = `
-            <h3>${livro.titulo}</h3>
-            <p><strong>Descrição:</strong> ${livro.descricao || ''}</p>
-            <p><strong>Data de Leitura:</strong> ${livro.data_leitura || ''}</p>
+            <div>
+                <h3>${livro.titulo}</h3>
+                <p><strong>Descrição:</strong> ${livro.descricao || ''}</p>
+            </div>
+            <p><strong>Data de Leitura:</strong> 
+                ${livro.data_leitura ? formatDateBR(livro.data_leitura) : ''}</p>
             <div class="star-rating" data-titulo="${livro.titulo}" onclick="alterarEstrelas(event, '${livro.titulo}')">
                 ${[1, 2, 3, 4, 5].map(i => `
                     <i class="fa fa-star ${livro.estrelas >= i ? 'checked' : ''}" data-estrela="${i}"></i>
                 `).join('')}
             </div>
-            <button class="delete-btn" onclick="removerLivro('${livro.titulo}')">
+            <button class="delete-btn" onclick="removerLivro('${livro._id}')">
                 <i class="fa fa-trash"></i>
             </button>
         `;
@@ -42,28 +55,66 @@ function exibirLivros(livros = [], categoriaFiltro = '') {
     });
 }
 
-// Função para remover livro
-function removerLivro(titulo) {
-    const index = livros.findIndex(livro => livro.titulo === titulo);
-    if (index !== -1) {
-        livros.splice(index, 1);
-        exibirLivros(livros);
+async function removerLivro(id) {
+    const livro = livros.find(livro => livro._id === id);
+    if (!livro) return;
+
+    const confirmDelete = confirm(`Tem certeza que deseja excluir o livro: "${livro.titulo}"?`);
+    if (!confirmDelete) return;
+
+    try {
+        const res = await fetch(`http://localhost:3000/api/livros/${livro._id}`, {
+            method: 'DELETE',
+        });
+
+        if (res.ok) {
+            livros = livros.filter(l => l._id !== livro._id);
+            exibirLivros(livros);
+            alert('Livro excluído com sucesso!');
+        } else {
+            const err = await res.json();
+            alert('Erro ao excluir: ' + err.message);
+        }
+    } catch (err) {
+        console.error('Erro ao excluir livro:', err);
+        alert('Erro ao conectar com o servidor.');
     }
 }
-
-// Função para alterar as estrelas
-function alterarEstrelas(event, titulo) {
+ //// Função para alterar estrelas e atualizar no backend
+ function alterarEstrelas(event, titulo) {
     const livro = livros.find(livro => livro.titulo === titulo);
     const estrela = event.target;
 
     if (estrela.tagName === 'I') {
         const novaClass = estrela.getAttribute('data-estrela');
         livro.estrelas = parseInt(novaClass);
-        exibirLivros(livros);
+
+        // Armazenando a alteração das estrelas no localStorage
+        localStorage.setItem('livros', JSON.stringify(livros));
+
+        exibirLivros(livros); // Recarregar livros após a alteração
     }
 }
 
-// Função para salvar um novo livro
+// Carregar livros do localStorage quando a página é recarregada
+function carregarLivros() {
+    const livrosSalvos = localStorage.getItem('livros');
+    if (livrosSalvos) {
+        livros = JSON.parse(livrosSalvos);
+        exibirLivros(livros);
+    } else {
+        fetch('http://localhost:3000/api/livros')
+            .then(res => res.json())
+            .then(data => {
+                livros = data;
+                exibirLivros(livros);
+            })
+            .catch(err => console.error('Erro ao carregar livros:', err));
+    }
+}
+
+carregarLivros();
+
 document.getElementById('salvarLivro').addEventListener('click', async () => {
   const payload = {
     titulo: document.getElementById('titulo').value,
@@ -74,7 +125,6 @@ document.getElementById('salvarLivro').addEventListener('click', async () => {
     descricao: document.getElementById('descricao').value
   };
 
-  // validação simples
   if (!payload.titulo || !payload.autor || isNaN(payload.avaliacao) 
       || !payload.categoria || !payload.data_leitura || !payload.descricao) {
     return alert('Preencha todos os campos');
@@ -105,7 +155,6 @@ document.getElementById('salvarLivro').addEventListener('click', async () => {
   }
 });
 
-// Modal
 const modal = document.getElementById("modal");
 const btnAbrir = document.getElementById("btnAdicionarLivro");
 const btnFechar = document.querySelector(".close");
@@ -131,9 +180,7 @@ window.addEventListener("click", (event) => {
     }
 });
 
-// Filtro de categoria
 document.getElementById('categoriaFiltro').addEventListener('change', e => {
-    carregarLivros().then(() => {
-        const livros = Array.from(document.querySelectorAll('.livro'));
-    });
+    const categoriaFiltro = e.target.value;
+    exibirLivros(livros, categoriaFiltro);
 });
