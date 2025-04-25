@@ -24,7 +24,7 @@ function formatDateBR(isoString) {
 
 function exibirLivros(livros = [], categoriaFiltro = '') {
     const livrosLista = document.getElementById('livrosLista');
-    livrosLista.innerHTML = '';
+    livrosLista.innerHTML = '';  // Limpar lista antes de re-renderizar
 
     const livrosFiltrados = categoriaFiltro
         ? livros.filter(livro => livro.categoria === categoriaFiltro)
@@ -54,7 +54,6 @@ function exibirLivros(livros = [], categoriaFiltro = '') {
         livrosLista.appendChild(livroDiv);
     });
 }
-
 async function removerLivro(id) {
     const livro = livros.find(livro => livro._id === id);
     if (!livro) return;
