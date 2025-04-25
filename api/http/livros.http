@@ -2,43 +2,4 @@
 @baseURL = http://localhost:3000/api/livros
 @id = 67f473c264bfbda4d0c6d1d9
 
-###
-# GET por ID
-GET {{baseURL}}/{{id}}
-Content-Type: application/json
 
-###
-# GET todos
-GET {{baseURL}}
-Content-Type: application/json
-
-###
-# POST - cria novo livro
-POST {{baseURL}}
-Content-Type: application/json
-
-{
-  "titulo": "Meu Livro Teste",
-  "avaliacao": 8.5,
-  "autor": "Fulano de Tal",
-  "data_leitura": "2025-04-25",
-  "descricao": "Um livro de testes para validar a API REST de cadastro."
-}
-
-###
-# PUT - atualiza livro (substitua :id)
-PUT {{baseURL}}/{{id}}
-Content-Type: application/json
-
-{
-  "titulo": "Título Atualizado",
-  "avaliacao": 9,
-  "autor": "Fulano Editado",
-  "data_leitura": "2025-05-01",
-  "descricao": "Livro atualizado com campos adicionais de data e descrição."
-}
-
-###
-# DELETE - remove livro
-DELETE {{baseURL}}/{{id}}
-Content-Type: application/json
