@@ -69,6 +69,7 @@ async function removerLivro(id) {
 
         if (res.ok) {
             livros = livros.filter(l => l._id !== livro._id);
+            localStorage.setItem('livros', JSON.stringify(livros));  // Atualiza o localStorage
             exibirLivros(livros);
             alert('Livro excluído com sucesso!');
         } else {
@@ -80,6 +81,7 @@ async function removerLivro(id) {
         alert('Erro ao conectar com o servidor.');
     }
 }
+
  //// Função para alterar estrelas e atualizar no backend
  function alterarEstrelas(event, titulo) {
     const livro = livros.find(livro => livro.titulo === titulo);
@@ -89,70 +91,87 @@ async function removerLivro(id) {
         const novaClass = estrela.getAttribute('data-estrela');
         livro.estrelas = parseInt(novaClass);
 
-        // Armazenando a alteração das estrelas no localStorage
+       
         localStorage.setItem('livros', JSON.stringify(livros));
 
-        exibirLivros(livros); // Recarregar livros após a alteração
+        exibirLivros(livros); 
     }
 }
 
 // Carregar livros do localStorage quando a página é recarregada
-function carregarLivros() {
-    const livrosSalvos = localStorage.getItem('livros');
-    if (livrosSalvos) {
-        livros = JSON.parse(livrosSalvos);
-        exibirLivros(livros);
-    } else {
-        fetch('http://localhost:3000/api/livros')
-            .then(res => res.json())
-            .then(data => {
-                livros = data;
-                exibirLivros(livros);
-            })
-            .catch(err => console.error('Erro ao carregar livros:', err));
+async function carregarLivros() {
+    try {
+        const livrosSalvos = localStorage.getItem('livros');
+        if (livrosSalvos) {
+            livros = JSON.parse(livrosSalvos);
+
+            // Verifique se cada livro ainda existe no backend antes de exibi-lo
+            const livrosValidos = [];
+            for (const livro of livros) {
+                const res = await fetch(`http://localhost:3000/api/livros/${livro._id}`);
+                if (res.ok) {
+                    livrosValidos.push(livro);  // Adiciona livros que ainda existem no backend
+                }
+            }
+
+            livros = livrosValidos;
+            exibirLivros(livros);
+        } else {
+            const res = await fetch('http://localhost:3000/api/livros');
+            const data = await res.json();
+            livros = data;
+            exibirLivros(livros);
+        }
+    } catch (err) {
+        console.error('Erro ao carregar livros:', err);
     }
 }
 
 carregarLivros();
 
 document.getElementById('salvarLivro').addEventListener('click', async () => {
-  const payload = {
-    titulo: document.getElementById('titulo').value,
-    autor:  document.getElementById('autor').value,
-    categoria: document.getElementById('categoria').value,
-    avaliacao: parseFloat(document.getElementById('avaliacao').value),
-    data_leitura: document.getElementById('dataLeitura').value,
-    descricao: document.getElementById('descricao').value
-  };
+    const payload = {
+        titulo: document.getElementById('titulo').value,
+        autor: document.getElementById('autor').value,
+        categoria: document.getElementById('categoria').value,
+        avaliacao: parseFloat(document.getElementById('avaliacao').value),
+        data_leitura: document.getElementById('dataLeitura').value,
+        descricao: document.getElementById('descricao').value
+    };
 
-  if (!payload.titulo || !payload.autor || isNaN(payload.avaliacao) 
-      || !payload.categoria || !payload.data_leitura || !payload.descricao) {
-    return alert('Preencha todos os campos');
-  }
-
-  try {
-    const res = await fetch('http://localhost:3000/api/livros', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    let result = {}
-    if (res.headers.get('content-length') > 0) {
-      result = await res.json();
+    if (!payload.titulo || !payload.autor || isNaN(payload.avaliacao) 
+        || !payload.categoria || !payload.data_leitura || !payload.descricao) {
+        return alert('Preencha todos os campos');
     }
 
-    if (res.ok) {
-      alert('Livro salvo com sucesso!');
-      document.getElementById('modal').style.display = 'none';
-      carregarLivros();
-    } else {
-      alert('Erro: ' + (result.message || res.statusText));
+    try {
+        const res = await fetch('http://localhost:3000/api/livros', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        let result = {}
+        if (res.headers.get('content-length') > 0) {
+            result = await res.json();
+        }
+
+        if (res.ok) {
+            alert('Livro salvo com sucesso!');
+            document.getElementById('modal').style.display = 'none';
+
+            // Atualize o localStorage com o novo livro
+            livros.push(result); // Adiciona o livro recém-adicionado ao array `livros`
+            localStorage.setItem('livros', JSON.stringify(livros)); // Atualiza o localStorage
+
+            exibirLivros(livros);  // Recarregar a lista no frontend com os livros atualizados
+        } else {
+            alert('Erro: ' + (result.message || res.statusText));
+        }
+    } catch (err) {
+        console.error('Fetch error:', err);
+        alert('Erro ao salvar livro');
     }
-  } catch (err) {
-    console.error('Fetch error:', err);
-    alert('Erro ao salvar livro');
-  }
 });
 
 const modal = document.getElementById("modal");
