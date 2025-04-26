@@ -1,14 +1,29 @@
 import { ObjectId } from "mongodb"
-
-// GET - Todos os livros
+// GET - Com filtro 
 export const getLivros = async (req, res) => {
     try {
-        const db = req.app.locals.db
-        const livros = await db.collection('livros').find().toArray()
-        res.status(200).json(livros)
+        const db = req.app.locals.db;
+        const { categoria, ordem } = req.query; 
+
+        const filtro = {};
+        const options = {};
+
+        
+        if (categoria) {
+            filtro.categoria = categoria;
+        }
+
+        if (ordem === 'maior') {
+            options.sort = { avaliacao: -1 }; 
+        } else if (ordem === 'menor') {
+            options.sort = { avaliacao: 1 }; 
+        }
+
+        const livros = await db.collection('livros').find(filtro, options).toArray();
+        res.status(200).json(livros);
     } catch (error) {
-        console.error(error)
-        res.status(500).json({ error: true, message: 'Erro ao buscar livros' })
+        console.error(error);
+        res.status(500).json({ error: true, message: 'Erro ao buscar livros' });
     }
 }
 
@@ -31,22 +46,23 @@ export const getLivrosById = async (req, res) => {
 // POST - Criar novo livro
 export const createLivro = async (req, res) => {
     try {
-        const { titulo, avaliacao, autor, data_leitura, descricao } = req.body
-        const db = req.app.locals.db
+        const { titulo, avaliacao, autor, data_leitura, descricao, categoria } = req.body; 
+        const db = req.app.locals.db;
 
         const novoLivro = {
             titulo,
             avaliacao,
             autor,
             data_leitura: data_leitura ? new Date(data_leitura) : null,
-            descricao
-        }
+            descricao,
+            categoria 
+        };
 
-        const result = await db.collection('livros').insertOne(novoLivro)
-        res.status(201).json({ _id: result.insertedId, ...novoLivro })
+        const result = await db.collection('livros').insertOne(novoLivro);
+        res.status(201).json({ _id: result.insertedId, ...novoLivro });
     } catch (error) {
-        console.error('Erro ao criar livro', error)
-        res.status(500).json({ error: true, message: 'Erro ao inserir o livro' })
+        console.error('Erro ao criar livro', error);
+        res.status(500).json({ error: true, message: 'Erro ao inserir o livro' });
     }
 }
 
@@ -99,3 +115,4 @@ export const deleteLivro = async (req, res) => {
         res.status(500).json({ error: true, message: 'Erro ao deletar o livro' })
     }
 }
+

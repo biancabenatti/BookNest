@@ -1,19 +1,38 @@
+// Array para armazenar os livros
 let livros = [];
 
+// Função para carregar livros do localStorage e do backend
 async function carregarLivros() {
     try {
-        const res = await fetch('http://localhost:3000/api/livros');
-        const data = await res.json();
-        livros = data;
-        console.log(livros);
-        exibirLivros(livros);
+        const livrosSalvos = localStorage.getItem('livros');
+        if (livrosSalvos) {
+            livros = JSON.parse(livrosSalvos);
+
+            const livrosValidos = [];
+            for (const livro of livros) {
+                const res = await fetch(`http://localhost:3000/api/livros/${livro._id}`);
+                if (res.ok) {
+                    livrosValidos.push(livro);
+                }
+            }
+
+            livros = livrosValidos;
+            exibirLivros(livros);
+        } else {
+            const res = await fetch('http://localhost:3000/api/livros');
+            const data = await res.json();
+            livros = data;
+            exibirLivros(livros);
+        }
     } catch (err) {
         console.error('Erro ao carregar livros:', err);
     }
 }
 
+// Chama a função para carregar livros ao iniciar a página
 carregarLivros();
 
+// Função para formatar datas no formato brasileiro
 function formatDateBR(isoString) {
     const d = new Date(isoString);
     const day = String(d.getDate()).padStart(2, '0');
@@ -22,13 +41,14 @@ function formatDateBR(isoString) {
     return `${day}-${month}-${year}`;
 }
 
-function exibirLivros(livros = [], categoriaFiltro = '') {
+// Função para exibir livros na tela
+function exibirLivros(livrosParaExibir = [], categoriaFiltro = '') {
     const livrosLista = document.getElementById('livrosLista');
-    livrosLista.innerHTML = '';  // Limpar lista antes de re-renderizar
+    livrosLista.innerHTML = '';
 
     const livrosFiltrados = categoriaFiltro
-        ? livros.filter(livro => livro.categoria === categoriaFiltro)
-        : livros;
+        ? livrosParaExibir.filter(livro => livro.categoria === categoriaFiltro)
+        : livrosParaExibir;
 
     livrosFiltrados.forEach(livro => {
         const livroDiv = document.createElement('div');
@@ -54,6 +74,8 @@ function exibirLivros(livros = [], categoriaFiltro = '') {
         livrosLista.appendChild(livroDiv);
     });
 }
+
+// Função para remover livro
 async function removerLivro(id) {
     const livro = livros.find(livro => livro._id === id);
     if (!livro) return;
@@ -68,7 +90,7 @@ async function removerLivro(id) {
 
         if (res.ok) {
             livros = livros.filter(l => l._id !== livro._id);
-            localStorage.setItem('livros', JSON.stringify(livros));  // Atualiza o localStorage
+            localStorage.setItem('livros', JSON.stringify(livros));
             exibirLivros(livros);
             alert('Livro excluído com sucesso!');
         } else {
@@ -81,8 +103,8 @@ async function removerLivro(id) {
     }
 }
 
- //// Função para alterar estrelas e atualizar no backend
- function alterarEstrelas(event, titulo) {
+// Função para alterar estrelas
+function alterarEstrelas(event, titulo) {
     const livro = livros.find(livro => livro.titulo === titulo);
     const estrela = event.target;
 
@@ -90,44 +112,12 @@ async function removerLivro(id) {
         const novaClass = estrela.getAttribute('data-estrela');
         livro.estrelas = parseInt(novaClass);
 
-       
         localStorage.setItem('livros', JSON.stringify(livros));
-
-        exibirLivros(livros); 
+        exibirLivros(livros);
     }
 }
 
-// Carregar livros do localStorage quando a página é recarregada
-async function carregarLivros() {
-    try {
-        const livrosSalvos = localStorage.getItem('livros');
-        if (livrosSalvos) {
-            livros = JSON.parse(livrosSalvos);
-
-            // Verifique se cada livro ainda existe no backend antes de exibi-lo
-            const livrosValidos = [];
-            for (const livro of livros) {
-                const res = await fetch(`http://localhost:3000/api/livros/${livro._id}`);
-                if (res.ok) {
-                    livrosValidos.push(livro);  // Adiciona livros que ainda existem no backend
-                }
-            }
-
-            livros = livrosValidos;
-            exibirLivros(livros);
-        } else {
-            const res = await fetch('http://localhost:3000/api/livros');
-            const data = await res.json();
-            livros = data;
-            exibirLivros(livros);
-        }
-    } catch (err) {
-        console.error('Erro ao carregar livros:', err);
-    }
-}
-
-carregarLivros();
-
+// Evento para salvar um novo livro
 document.getElementById('salvarLivro').addEventListener('click', async () => {
     const payload = {
         titulo: document.getElementById('titulo').value,
@@ -150,7 +140,7 @@ document.getElementById('salvarLivro').addEventListener('click', async () => {
             body: JSON.stringify(payload)
         });
 
-        let result = {}
+        let result = {};
         if (res.headers.get('content-length') > 0) {
             result = await res.json();
         }
@@ -159,11 +149,9 @@ document.getElementById('salvarLivro').addEventListener('click', async () => {
             alert('Livro salvo com sucesso!');
             document.getElementById('modal').style.display = 'none';
 
-            // Atualize o localStorage com o novo livro
-            livros.push(result); // Adiciona o livro recém-adicionado ao array `livros`
-            localStorage.setItem('livros', JSON.stringify(livros)); // Atualiza o localStorage
-
-            exibirLivros(livros);  // Recarregar a lista no frontend com os livros atualizados
+            livros.push(result);
+            localStorage.setItem('livros', JSON.stringify(livros));
+            exibirLivros(livros);
         } else {
             alert('Erro: ' + (result.message || res.statusText));
         }
@@ -173,6 +161,7 @@ document.getElementById('salvarLivro').addEventListener('click', async () => {
     }
 });
 
+// Controle do modal
 const modal = document.getElementById("modal");
 const btnAbrir = document.getElementById("btnAdicionarLivro");
 const btnFechar = document.querySelector(".close");
@@ -198,7 +187,27 @@ window.addEventListener("click", (event) => {
     }
 });
 
+// Função de filtro/ordenação
+function aplicarFiltro(filtro) {
+    let lista = [...livros];
+
+    // filtro de categoria (valor é "ficcao","ciencia" ou "historia")
+    if (filtro === 'ficcao' || filtro === 'ciencia' || filtro === 'historia') {
+        lista = lista.filter(l => l.categoria === filtro);
+    }
+    // ordenar por avaliação (valor é "maior" ou "menor")
+    else if (filtro === 'maior') {
+        lista.sort((a, b) => b.avaliacao - a.avaliacao);
+    }
+    else if (filtro === 'menor') {
+        lista.sort((a, b) => a.avaliacao - b.avaliacao);
+    }
+    // se filtro for "", mostra tudo
+
+    exibirLivros(lista);
+}
+// Evento para aplicar filtro quando selecionar no select
 document.getElementById('categoriaFiltro').addEventListener('change', e => {
-    const categoriaFiltro = e.target.value;
-    exibirLivros(livros, categoriaFiltro);
+    aplicarFiltro(e.target.value);
 });
+
