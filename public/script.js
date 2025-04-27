@@ -55,16 +55,19 @@ function exibirLivros(livrosParaExibir = [], categoriaFiltro = '') {
         livroDiv.classList.add('livro');
 
         livroDiv.innerHTML = `
-            <div>
+            <div class="livro-info">
                 <h3>${livro.titulo}</h3>
-                <p><strong>Descrição:</strong> ${livro.descricao || ''}</p>
-            </div>
-            <p><strong>Data de Leitura:</strong> 
+                <p><strong></strong> ${livro.descricao || ''}</p>
+                </div>
+                <div class="livro-info-2">
+                <p><strong>Data de Leitura</strong> </br>
                 ${livro.data_leitura ? formatDateBR(livro.data_leitura) : ''}</p>
-            <div class="star-rating" data-titulo="${livro.titulo}" onclick="alterarEstrelas(event, '${livro.titulo}')">
+                <p><strong>Categoria:</strong> ${livro.categoria || ''}</p>
+                <div class="star-rating" data-titulo="${livro.titulo}" onclick="alterarEstrelas(event, '${livro.titulo}')">
                 ${[1, 2, 3, 4, 5].map(i => `
                     <i class="fa fa-star ${livro.estrelas >= i ? 'checked' : ''}" data-estrela="${i}"></i>
-                `).join('')}
+                    `).join('')}
+            </div>
             </div>
             <button class="delete-btn" onclick="removerLivro('${livro._id}')">
                 <i class="fa fa-trash"></i>

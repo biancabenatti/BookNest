@@ -25,7 +25,7 @@ export const validateLivro = [
 
     check('avaliacao')
         .optional()
-        .isFloat({ min: 0, max: 10 }).withMessage('A avaliação deve ser um número entre 0 e 10'),
+        .isFloat({ min: 0, max: 10 }).withMessage('A avaliação deve ser um número entre 0 e 5'),
 
 
     check('data_leitura')

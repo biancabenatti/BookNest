@@ -120,21 +120,6 @@ header {
     text-align: center;
 }
 
-.livros {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-
-}
-
-.livros div {
-    background: white;
-    padding: 1rem;
-    border-radius: 3.2rem;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-    width: 1.5rem;
-}
-
 /* INTRO //////////////////////////////////*/
 
 #wrapper {
@@ -196,11 +181,10 @@ header {
     font-family: "Poiret One", sans-serif;
     color: #adc5cf;
     font-size: 1rem;
-    margin-bottom: 1rem;
-    margin-top: 2rem;
     text-align: center;
     font-weight: 600;
-    letter-spacing: 0.2em;
+    letter-spacing: 0.1em;
+    color:#032f3b
 
 }
 
@@ -262,7 +246,7 @@ header {
 #livrosLista {
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
+    gap: 1.1rem;
     margin-bottom: 4rem;
     align-items: center;
 }
@@ -272,35 +256,30 @@ header {
     padding: 1rem;
     border-radius: 0.8rem;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: left;
     display: flex;
-    gap: 1rem;
+    gap: 5rem;
     align-items: center;
-    width: 60rem;
+    width: 50rem;
+}
+.livro-info{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 20rem;
+    height: auto;
     margin-left: 2rem;
 }
 
-.livro img {
-    width: 4.5rem;
-    height: 6rem;
-    object-fit: cover;
-    border-radius: 0.4rem;
+.livro-info-2{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
 }
 
-.livro h3 {
-    margin: 0;
-    font-size: 1.2em;
-}
 
 .livro input[type="checkbox"] {
     margin-left: auto;
-}
-
-.star-rating {
-    display: flex;
-    gap: 0.4rem;
-    margin-left: auto;
-    margin-right: 3rem;
 }
 
 .star-rating .fa-star {

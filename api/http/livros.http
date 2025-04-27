@@ -1,38 +1,54 @@
 # API REST de Livros
+
 @baseURL = http://localhost:3000/api/livros
 @id = 67f473c264bfbda4d0c6d1d9
 
 ###
-# GET todos os livros
-GET http://localhost:3000/api/livros
+# GET - Buscar todos os livros
+GET {{baseURL}}
+Content-Type: application/json
+
+# GET - Buscar livro por ID
+GET {{baseURL}}/{{id}}
 Content-Type: application/json
 
 ###
-# POST cria um livro
-POST http://localhost:3000/api/livros
+
+# GET - Buscar livros por Categoria
+GET {{baseURL}}/categoria/{{categoria}}
+Content-Type: application/json
+
+###
+# POST - Criar um novo livro
+POST {{baseURL}}
 Content-Type: application/json
 
 {
-  "_id": 1234567,
+  "_id": "1234567",
   "titulo": "Meu Livro Teste",
-  "capa": "https://url-da-imagem.jpg",
   "avaliacao": 8.5,
   "autor": "Fulano de Tal"
+  data_leitura: "2025-04-25",
+  descricao: "Uma épica história de fantasia que narra a jornada para destruir o Um Anel.",
+  categoria: "ficçao"
 }
 
 ###
-# PUT atualiza o livro (substitua :id por um _id válido retornado no POST)
-PUT http://localhost:3000/api/livros/:id
+# PUT - Atualizar um livro existente
+PUT {{baseURL}}/{{id}}
 Content-Type: application/json
 
 {
-  "_id": 7654321,
-  "titulo": "Título Atualizado",
-  "capa": "https://outra-imagem.jpg",
-  "avaliacao": 9,
-  "autor": "Fulano Editado"
+   "_id": "1234567",
+  "titulo": "Meu Livro Teste",
+  "avaliacao": 8.5,
+  "autor": "Fulano de Tal"
+  data_leitura: "2025-04-25",
+  descricao: "Uma épica história de fantasia que narra a jornada para destruir o Um Anel.",
+  categoria: "ficçao"
 }
 
 ###
-# DELETE remove o livro
-DELETE http://localhost:3000/api/livros/:id
+# DELETE - Deletar um livro
+DELETE {{baseURL}}/{{id}}
+Content-Type: application/json
