@@ -1,3 +1,5 @@
+import './css/style.css'
+
 document.getElementById('form-livro').addEventListener('submit', async (event) => {
   event.preventDefault()
 
