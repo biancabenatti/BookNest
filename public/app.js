@@ -10,13 +10,8 @@ document.getElementById('form-livro').addEventListener('submit', async (event) =
     descricao: form.descricao.value         
   }
 
-  // Verifica se está em ambiente de produção (Vercel ou similar)
-  const apiUrl = window.location.hostname === 'localhost' 
-    ? 'http://localhost:3000'   // Local
-    : 'https://book-nest-steel.vercel.app'; 
-
   try {
-    const response = await fetch(`${apiUrl}/api/livros`, {
+    const response = await fetch('http://localhost:3000/api/livros', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -35,3 +30,5 @@ document.getElementById('form-livro').addEventListener('submit', async (event) =
     console.error(err)
   }
 })
+
+
