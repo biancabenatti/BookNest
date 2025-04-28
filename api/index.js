@@ -8,7 +8,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(cors({
-  origin: 'https://book-nest-mauve-delta.vercel.app', // Seu domínio de frontend
+  origin: 'https://book-nest-phi.vercel.app', // Seu domínio de frontend
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
   allowedHeaders: ['Content-Type'] // Cabeçalhos permitidos
 }))
