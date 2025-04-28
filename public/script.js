@@ -10,7 +10,7 @@ async function carregarLivros() {
 
             const livrosValidos = [];
             for (const livro of livros) {
-                const res = await fetch(`https://book-nest-phi.vercel.app/api/livros/${livro._id}`);
+              const res = await fetch(`http://localhost:3000/api/livros/${livro._id}`);
                 if (res.ok) {
                     livrosValidos.push(livro);
                 }
@@ -19,7 +19,7 @@ async function carregarLivros() {
             livros = livrosValidos;
             exibirLivros(livros);
         } else {
-            const res = await fetch('https://book-nest-phi.vercel.app/api/livros');
+            const res = await fetch('http://localhost:3000/api/livros');
             const data = await res.json();
             livros = data;
             exibirLivros(livros);
@@ -106,7 +106,7 @@ function editarDescricao(idLivro) {
     
         try {
             // Envia a nova descrição para o backend
-            await fetch(`https://book-nest-phi.vercel.app/api/livros/${idLivro}`, {
+            await fetch(`http://localhost:3000/api/livros/${idLivro}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -149,7 +149,7 @@ async function removerLivro(id) {
     if (!confirmDelete) return;
 
     try {
-        const res = await fetch(`https://book-nest-phi.vercel.app/api/livros/${livro._id}`, {
+        const res = await fetch(`http://localhost:3000/api/livros/${livro._id}`,{
             method: 'DELETE',
         });
 
@@ -186,7 +186,7 @@ document.getElementById('salvarLivro').addEventListener('click', async () => {
     }
 
     try {
-        const res = await fetch('https://book-nest-phi.vercel.app/api/livros', {
+        const res = await fetch('http://localhost:3000/api/livros', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
