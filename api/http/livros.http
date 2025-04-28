@@ -1,6 +1,6 @@
 # API REST de Livros
 
-@baseURL = https://book-nest-lemon.vercel.app/api/livros
+@baseURL = https://book-nest-mauve-delta.vercel.app/api/livros
 @id = 67f473c264bfbda4d0c6d1d9
 
 ###
@@ -13,7 +13,6 @@ GET {{baseURL}}/{{id}}
 Content-Type: application/json
 
 ###
-
 # GET - Buscar livros por Categoria
 GET {{baseURL}}/categoria/{{categoria}}
 Content-Type: application/json
