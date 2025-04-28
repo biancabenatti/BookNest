@@ -1,6 +1,12 @@
 // Array para armazenar os livros
 let livros = [];
 
+function obterApiUrl() {
+    return window.location.hostname === 'localhost'
+        ? 'http://localhost:3000'
+        : 'https://book-nest-steel.vercel.app';
+}
+
 // Função para carregar livros do localStorage e do backend
 async function carregarLivros() {
     try {
@@ -10,7 +16,7 @@ async function carregarLivros() {
 
             const livrosValidos = [];
             for (const livro of livros) {
-              const res = await fetch(`/api/livros/${livro._id}`);
+                const res = await fetch(`${obterApiUrl()}/api/livros/${livro._id}`);
                 if (res.ok) {
                     livrosValidos.push(livro);
                 }
@@ -19,7 +25,7 @@ async function carregarLivros() {
             livros = livrosValidos;
             exibirLivros(livros);
         } else {
-            const res = await fetch('/api/livros');
+            const res = await fetch(`${obterApiUrl()}/api/livros`);
             const data = await res.json();
             livros = data;
             exibirLivros(livros);
@@ -106,14 +112,14 @@ function editarDescricao(idLivro) {
     
         try {
             // Envia a nova descrição para o backend
-            await fetch(`/api/livros/${idLivro}`, {
+            await fetch(`${obterApiUrl()}/api/livros/${idLivro}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ descricao: novaDescricao })
             });
-    
+            
             // Atualiza a descrição na tela
             pDescricao.innerHTML = `<strong>Descrição:</strong> ${novaDescricao}`;
             
@@ -149,7 +155,7 @@ async function removerLivro(id) {
     if (!confirmDelete) return;
 
     try {
-        const res = await fetch(`/api/livros/${livro._id}`,{
+        const res = await fetch(`${obterApiUrl()}/api/livros/${livro._id}`,{
             method: 'DELETE',
         });
 
@@ -186,7 +192,7 @@ document.getElementById('salvarLivro').addEventListener('click', async () => {
     }
 
     try {
-        const res = await fetch('/api/livros', {
+        const res = await fetch(`${obterApiUrl()}/api/livros`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
