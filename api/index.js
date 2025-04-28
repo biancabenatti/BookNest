@@ -7,18 +7,23 @@ import livrosRoutes from './routes/livros.js';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
-app.use(express.json());
+app.use(cors({
+  origin: 'https://book-nest-mauve-delta.vercel.app', // Seu domínio de frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+  allowedHeaders: ['Content-Type'] // Cabeçalhos permitidos
+}))
 
-// Primeiro registra as rotas da API
-app.use('/api/livros', livrosRoutes);
+app.use(express.json()) // parse do JSON
 
-// Depois registra os arquivos estáticos
-app.use('/', express.static('public'));
+// rota publica
+app.use('/', express.static('public'))
+
+// Rotas da API de livros
+app.use('/api/livros', livrosRoutes)
 
 // Conecta ao MongoDB e inicia o servidor
 connectToDatabase(app).then(() => {
-  app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}!`);
-  });
-});
+    app.listen(PORT, () => {
+        console.log(`Servidor rodando na porta ${PORT}!`)
+    })
+})
