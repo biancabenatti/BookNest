@@ -11,7 +11,7 @@ document.getElementById('form-livro').addEventListener('submit', async (event) =
   }
 
   try {
-    const response = await fetch('http://localhost:3000/api/livros', {
+    const response = await fetch('/api/livros', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
