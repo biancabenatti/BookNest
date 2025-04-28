@@ -1,29 +1,24 @@
-import express from 'express'
-import cors from 'cors'
-import 'dotenv/config'
-import { connectToDatabase } from './config/db.js'
-import livrosRoutes from './routes/livros.js'
- 
-const app = express()
-const PORT = process.env.PORT || 3000
+import express from 'express';
+import cors from 'cors';
+import 'dotenv/config';
+import { connectToDatabase } from './config/db.js';
+import livrosRoutes from './routes/livros.js';
 
-// Habilita CORS para todas as origens (desenvolvimento)
-app.use(cors())
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-app.use(express.json()) // parse do JSON
+app.use(cors());
+app.use(express.json());
 
-// rota publica
-app.use('/', express.static('public'))
+// Primeiro registra as rotas da API
+app.use('/api/livros', livrosRoutes);
 
-// Rotas da API de livros
-app.use('/api/livros', livrosRoutes)
-
-// favicon
-app.use('/favicon.ico', express.static('public/images/pesquisa.png'))
+// Depois registra os arquivos estáticos
+app.use('/', express.static('public'));
 
 // Conecta ao MongoDB e inicia o servidor
 connectToDatabase(app).then(() => {
-    app.listen(PORT, () => {
-        console.log(`Servidor rodando na porta ${PORT}!`)
-    })
-})
+  app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}!`);
+  });
+});
