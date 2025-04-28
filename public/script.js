@@ -4,30 +4,15 @@ let livros = [];
 // Função para carregar livros do localStorage e do backend
 async function carregarLivros() {
     try {
-        const livrosSalvos = localStorage.getItem('livros');
-        if (livrosSalvos) {
-            livros = JSON.parse(livrosSalvos);
-
-            const livrosValidos = [];
-            for (const livro of livros) {
-              const res = await fetch(`/api/livros/${livro._id}`);
-                if (res.ok) {
-                    livrosValidos.push(livro);
-                }
-            }
-
-            livros = livrosValidos;
-            exibirLivros(livros);
-        } else {
-            const res = await fetch('/api/livros');
-            const data = await res.json();
-            livros = data;
-            exibirLivros(livros);
-        }
+      const res = await fetch('/api/livros');
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      livros = data;
+      exibirLivros(livros);
     } catch (err) {
-        console.error('Erro ao carregar livros:', err);
+      console.error('Erro ao carregar livros:', err);
     }
-}
+  }
 
 // Chama a função para carregar livros ao iniciar a página
 carregarLivros();
