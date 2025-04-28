@@ -20,7 +20,7 @@ router.get('/:id', getLivrosById)
 router.post('/', validateLivro, createLivro)
 
 // PUT atualiza livro
-router.put('/:id', validateLivro, updateLivro)
+router.put('/:id', updateLivro)
 
 // DELETE livro
 router.delete('/:id', deleteLivro)

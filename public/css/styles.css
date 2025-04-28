@@ -38,6 +38,17 @@ ul {
     text-transform: uppercase;
 }
 
+.edit-btn{
+    font-family: "Outfit", sans-serif;
+    background: none;
+    border: none;
+    color: #01161b;
+    font-size: 0.8rem;
+    cursor: pointer;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
 .sidebar {
     font-family: "Poiret One", sans-serif;
     font-weight: 400;
@@ -305,6 +316,23 @@ header {
 
 .delete-btn:hover {
     color: #7b3f50;
+}
+
+.btn-salvar {
+    font-family: "Outfit", sans-serif;
+    background: none;
+    border: none;
+    color: #01161b;
+    font-size: 0.8rem;
+    cursor: pointer;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    border-radius: 0.5rem;
+    margin-top: 0.3rem;
+}
+
+.btn-salvar:hover {
+    background-color: #f89d55; 
 }
 
 

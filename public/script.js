@@ -57,17 +57,18 @@ function exibirLivros(livrosParaExibir = [], categoriaFiltro = '') {
         livroDiv.innerHTML = `
             <div class="livro-info">
                 <h3>${livro.titulo}</h3>
-                <p><strong></strong> ${livro.descricao || ''}</p>
-                </div>
-                <div class="livro-info-2">
-                <p><strong>Data de Leitura</strong> </br>
+                <p id="descricao-${livro._id}"><strong>Descrição:</strong> ${livro.descricao || ''}</p>
+                <button class="edit-btn" onclick="editarDescricao('${livro._id}')"><i class="fa fa-edit"></i> Editar descrição</button>
+            </div>
+            <div class="livro-info-2">
+                <p><strong>Data de Leitura</strong></br>
                 ${livro.data_leitura ? formatDateBR(livro.data_leitura) : ''}</p>
                 <p><strong>Categoria:</strong> ${livro.categoria || ''}</p>
                 <div class="star-rating" data-titulo="${livro.titulo}" onclick="alterarEstrelas(event, '${livro.titulo}')">
-                ${[1, 2, 3, 4, 5].map(i => `
-                    <i class="fa fa-star ${livro.estrelas >= i ? 'checked' : ''}" data-estrela="${i}"></i>
+                    ${[1,2,3,4,5].map(i=>`
+                        <i class="fa fa-star ${livro.avaliacao>=i?'checked':''}" data-estrela="${i}"></i>
                     `).join('')}
-            </div>
+                </div>
             </div>
             <button class="delete-btn" onclick="removerLivro('${livro._id}')">
                 <i class="fa fa-trash"></i>
@@ -76,6 +77,67 @@ function exibirLivros(livrosParaExibir = [], categoriaFiltro = '') {
 
         livrosLista.appendChild(livroDiv);
     });
+}
+function editarDescricao(idLivro) {
+    const pDescricao = document.getElementById(`descricao-${idLivro}`);
+    
+    // Cria um input para editar
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.value = pDescricao.innerText.replace('Descrição:', '').trim();
+    input.id = `input-descricao-${idLivro}`;
+    input.style.width = '90%';
+    input.style.padding = '8px';
+    input.style.width = '90%';
+    input.style.border = '1px solid #ccc';
+    input.style.borderRadius = '4px';
+    input.style.fontSize = '14px';
+    input.style.marginRight = '10px';
+    
+
+    // Botão de salvar
+    const btnSalvar = document.createElement('button');
+    btnSalvar.innerText = 'Salvar';
+    btnSalvar.style.marginLeft = '10px';
+    btnSalvar.classList.add('btn-salvar');
+    
+    btnSalvar.onclick = async function() {
+        const novaDescricao = document.getElementById(`input-descricao-${idLivro}`).value;
+    
+        try {
+            // Envia a nova descrição para o backend
+            await fetch(`http://localhost:3000/api/livros/${idLivro}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ descricao: novaDescricao })
+            });
+    
+            // Atualiza a descrição na tela
+            pDescricao.innerHTML = `<strong>Descrição:</strong> ${novaDescricao}`;
+            
+            // Atualiza o livro no array 'livros' para refletir a mudança
+            const livro = livros.find(l => l._id === idLivro);
+            if (livro) {
+                livro.descricao = novaDescricao;  // Atualiza a descrição no array
+            }
+            
+            // Remove input e botão de salvar
+            input.remove();
+            btnSalvar.remove();
+            
+            alert('Descrição atualizada com sucesso!');
+        } catch (error) {
+            console.error('Erro ao atualizar descrição:', error);
+            alert('Erro ao atualizar descrição.');
+        }
+    };
+
+    // Limpa o parágrafo e coloca o input + botão
+    pDescricao.innerHTML = '';
+    pDescricao.appendChild(input);
+    pDescricao.appendChild(btnSalvar);
 }
 
 // Função para remover livro
@@ -106,19 +168,6 @@ async function removerLivro(id) {
     }
 }
 
-// Função para alterar estrelas
-function alterarEstrelas(event, titulo) {
-    const livro = livros.find(livro => livro.titulo === titulo);
-    const estrela = event.target;
-
-    if (estrela.tagName === 'I') {
-        const novaClass = estrela.getAttribute('data-estrela');
-        livro.estrelas = parseInt(novaClass);
-
-        localStorage.setItem('livros', JSON.stringify(livros));
-        exibirLivros(livros);
-    }
-}
 
 // Evento para salvar um novo livro
 document.getElementById('salvarLivro').addEventListener('click', async () => {

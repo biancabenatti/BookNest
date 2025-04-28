@@ -69,33 +69,32 @@ export const createLivro = async (req, res) => {
 // PUT - Atualizar livro por ID
 export const updateLivro = async (req, res) => {
     try {
-        const { id } = req.params
-        const { titulo, avaliacao, autor, data_leitura, descricao } = req.body
-        const db = req.app.locals.db
+        const { id } = req.params;
+        const db = req.app.locals.db;
+
+        const camposAtualizar = {};
+
+        if (req.body.titulo !== undefined) camposAtualizar.titulo = req.body.titulo;
+        if (req.body.avaliacao !== undefined) camposAtualizar.avaliacao = req.body.avaliacao;
+        if (req.body.autor !== undefined) camposAtualizar.autor = req.body.autor;
+        if (req.body.data_leitura !== undefined) camposAtualizar.data_leitura = req.body.data_leitura ? new Date(req.body.data_leitura) : null;
+        if (req.body.descricao !== undefined) camposAtualizar.descricao = req.body.descricao;
 
         const result = await db.collection('livros').updateOne(
             { _id: ObjectId.createFromHexString(id) },
-            {
-                $set: {
-                    titulo,
-                    avaliacao,
-                    autor,
-                    data_leitura: data_leitura ? new Date(data_leitura) : null,
-                    descricao
-                }
-            }
-        )
+            { $set: camposAtualizar }
+        );
 
         if (result.matchedCount === 0) {
-            return res.status(404).json({ error: true, message: 'Livro não encontrado' })
+            return res.status(404).json({ error: true, message: 'Livro não encontrado' });
         }
 
-        res.status(200).json({ message: 'Livro atualizado com sucesso' })
+        res.status(200).json({ message: 'Livro atualizado com sucesso' });
     } catch (error) {
-        console.error('Erro ao atualizar livro', error)
-        res.status(500).json({ error: true, message: 'Erro ao atualizar o livro' })
+        console.error('Erro ao atualizar livro', error);
+        res.status(500).json({ error: true, message: 'Erro ao atualizar o livro' });
     }
-}
+};
 
 // DELETE - Remover livro por ID
 export const deleteLivro = async (req, res) => {
