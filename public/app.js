@@ -13,7 +13,7 @@ document.getElementById('form-livro').addEventListener('submit', async (event) =
   }
 
   try {
-    const response = await fetch('/api/livros', {
+    const response = await fetch('https://book-nest-lemon.vercel.app/api/livros', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

@@ -1,6 +1,6 @@
 # API REST de Livros
 
-@baseURL = http://localhost:3000/api/livros
+@baseURL = https://book-nest-lemon.vercel.app/api/livros
 @id = 67f473c264bfbda4d0c6d1d9
 
 ###
