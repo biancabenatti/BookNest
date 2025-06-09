@@ -1,0 +1,221 @@
+/* Variáveis de cores - Mantendo a consistência */
+:root {
+    --primary-dark: #032f3b;
+    --secondary-dark: #094854;
+    --accent-red: #c0392b; /* Vermelho para erros */
+    --accent-green: #27ae60; /* Verde para sucesso */
+    --light-blue: #adc5cf;
+    --off-white: #e0f0f5;
+    --highlight-orange: #157c91;
+    --gradient-start: #032f3b;
+    --gradient-end: #094854;
+
+    --font-outfit: 'Outfit', sans-serif;
+    --font-poiret: 'Poiret One', cursive;
+}
+
+body {
+    background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: var(--font-outfit);
+    color: var(--off-white);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.cadastro-container {
+    background: rgba(173, 197, 207, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    padding: 40px;
+    text-align: center;
+    width: 90%;
+    max-width: 450px;
+    box-sizing: border-box;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.cadastro-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+}
+
+.cadastro-container h2 {
+    font-family: var(--font-poiret);
+    font-size: 2.8rem;
+    margin-bottom: 2.5rem;
+    color: var(--light-blue);
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
+    letter-spacing: 0.1em;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 300;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 15px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--off-white);
+    font-family: var(--font-outfit);
+    font-size: 1.1rem;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--highlight-orange);
+    box-shadow: 0 0 0 4px rgba(21, 124, 145, 0.4);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.cadastro-button {
+    border: none;
+    border-radius: 30px;
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    padding: 15px 40px;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 1.1rem;
+    background: linear-gradient(45deg, var(--highlight-orange), #0f6c80);
+    display: block;
+    width: 100%;
+    margin-top: 40px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    background-size: 200% 200%;
+}
+
+.cadastro-button:hover {
+    background-position: right center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    transform: translateY(-2px);
+}
+
+.cadastro-button:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.error-message {
+    color: var(--accent-red);
+    font-size: 0.95rem;
+    margin-top: 20px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+    font-weight: 500;
+}
+
+.error-message.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.success-message {
+    color: var(--accent-green); /* Nova cor para mensagens de sucesso */
+    font-size: 0.95rem;
+    margin-top: 20px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+    font-weight: 500;
+}
+
+.success-message.visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.login-link {
+    margin-top: 25px;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.login-link a {
+    color: var(--light-blue); /* Cor do link para login */
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.login-link a:hover {
+    color: var(--highlight-orange);
+    text-decoration: underline;
+}
+
+/* Media Queries para Responsividade */
+@media (max-width: 600px) {
+    .cadastro-container {
+        padding: 30px;
+        border-radius: 15px;
+    }
+    .cadastro-container h2 {
+        font-size: 2.2rem;
+        margin-bottom: 2rem;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-group input {
+        padding: 12px 15px;
+        font-size: 1rem;
+    }
+    .cadastro-button {
+        padding: 12px 30px;
+        font-size: 1rem;
+        margin-top: 30px;
+    }
+    .error-message, .success-message {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-height: 550px) {
+    .cadastro-container {
+        padding: 25px;
+        margin: 20px 0;
+        max-width: 350px;
+    }
+    .cadastro-container h2 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+    .form-group input {
+        padding: 10px 15px;
+    }
+    .cadastro-button {
+        padding: 10px 25px;
+        margin-top: 25px;
+    }
+}

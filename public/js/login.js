@@ -3,21 +3,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorMessage = document.getElementById('errorMessage');
 
     loginForm.addEventListener('submit', (event) => {
-        event.preventDefault(); 
+        event.preventDefault(); // Impede o envio padrão do formulário
 
         const username = loginForm.username.value;
         const password = loginForm.password.value;
 
-        
-        const VALID_USERNAME = 'user';
-        const VALID_PASSWORD = 'password123'; 
+        // Limpa mensagens anteriores
+        errorMessage.classList.remove('visible');
+        errorMessage.textContent = '';
 
-        if (username === VALID_USERNAME && password === VALID_PASSWORD) {
+        // Pega a lista de usuários do localStorage
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+
+        // Encontra o usuário
+        const foundUser = users.find(user => user.username === username && user.password === password);
+
+        if (foundUser) {
             // Login bem-sucedido
-            errorMessage.classList.remove('visible');
-            // Armazena um sinal de que o usuário está logado
             localStorage.setItem('isLoggedIn', 'true'); 
-            // Redireciona para a página principal
             window.location.href = 'index.html'; 
         } else {
             // Login falhou
