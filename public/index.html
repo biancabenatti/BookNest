@@ -46,19 +46,19 @@
                 <option value="maior">Maior Avaliação</option>
                 <option value="menor">Menor Avaliação</option>
             </select>
-            
+
         </div>
 
         <section class="catalogo">
 
             <div id="livrosLista">
-                
+
             </div>
         </section>
     </section>
 
     <!-- Modal para Adicionar Novo Livro -->
-<div id="modal" class="modal">
+    <div id="modal" class="modal">
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Adicionar Novo Livro</h2>
@@ -69,26 +69,29 @@
         </div>
 
         <div class="modal-autor">
+            <div></div>
             <label for="autor">Autor</label>
             <input type="text" id="autor">
 
-            <label for="avaliacao">Avaliação</label>
-            <input type="number" id="avaliacao" min="0" max="5">
-        </div>
-
-    
-        <div class="modal-avaliacao">
-            <label for="categoria">Categoria</label>
-            <select id="categoria">
-                <option value="ficcao">Ficção</option>
-                <option value="ciencia">Ciência</option>
-                <option value="historia">História</option>
-            </select>
-            
-            
+            <div>
                 <label for="dataLeitura">Data de Leitura</label>
                 <input type="date" id="dataLeitura">
-           
+            </div>
+        </div>
+
+        <div class="modal-grid-fields">
+            <div>
+                <label for="categoria">Categoria</label>
+                <select id="categoria">
+                    <option value="ficcao">Ficção</option>
+                    <option value="ciencia">Ciência</option>
+                    <option value="historia">História</option>
+                </select>
+            </div>
+            <div>
+                <label for="avaliacao">Avaliação</label>
+                <input type="number" id="avaliacao" min="0" max="5">
+            </div>
         </div>
 
         <div class="modal-descricao">
