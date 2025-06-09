@@ -211,16 +211,16 @@ btnAbrir.addEventListener("click", () => {
     document.getElementById('dataLeitura').value = '';
     document.getElementById('descricao').value = '';
 
-    modal.style.display = "block";
+    modal.classList.add("is-visible");
 });
 
 btnFechar.addEventListener("click", () => {
-    modal.style.display = "none";
+    modal.classList.remove("is-visible");
 });
 
 window.addEventListener("click", (event) => {
     if (event.target === modal) {
-        modal.style.display = "none";
+        modal.classList.remove("is-visible");
     }
 });
 
