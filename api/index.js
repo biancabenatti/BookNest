@@ -1,7 +1,8 @@
 
 import express from 'express';
 import cors from 'cors';
-import 'dotenv/config';
+import dotenv from 'dotenv';
+dotenv.config();
 import { connectToDatabase } from './config/db.js'; // Apenas a função connectToDatabase
 import livrosRoutes from './routes/livros.js';
 import authRoutes from './routes/auth.js';
