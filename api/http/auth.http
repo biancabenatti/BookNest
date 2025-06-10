@@ -7,12 +7,13 @@
 # 1. Teste de Registro de Usuário
 # Endpoint: /api/auth/register
 # Método: POST
-# Deve retornar: 201 Created se sucesso, 409 Conflict se username já existe.
+# Deve retornar: 201 Created se sucesso, 409 Conflict se e-mail já existe.
 POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-    "username": "usuario_1234",
+    "name": "Nome do Usuario",      
+    "email": "teste@email.com",     
     "password": "senha_segura_12344"
 }
 
@@ -21,13 +22,12 @@ Content-Type: application/json
 # Endpoint: /api/auth/login
 # Método: POST
 # Deve retornar: 200 OK e um token JWT válido.
-# IMPORTANTE: Copie o 'token' da resposta e cole no @token acima!
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-    "username": "usuario_teste1",
-    "password": "senha_segura_123"
+    "email": "teste@email.com",    
+    "password": "senha_segura_12344"
 }
 
 ###
