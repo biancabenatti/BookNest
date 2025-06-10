@@ -2,8 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     const errorMessage = document.getElementById('errorMessage');
 
-    loginForm.addEventListener('submit', (event) => {
-        event.preventDefault(); // Impede o envio padrão do formulário
+    loginForm.addEventListener('submit', async (event) => { 
 
         const username = loginForm.username.value;
         const password = loginForm.password.value;
@@ -12,20 +11,35 @@ document.addEventListener('DOMContentLoaded', () => {
         errorMessage.classList.remove('visible');
         errorMessage.textContent = '';
 
-        // Pega a lista de usuários do localStorage
-        const users = JSON.parse(localStorage.getItem('users')) || [];
+        try {
+            // -- ADICIONE A REQUISIÇÃO PARA O BACKEND AQUI --
+            const response = await fetch('https://book-nest-hhh.vercel.app/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, password }),
+            });
 
-        // Encontra o usuário
-        const foundUser = users.find(user => user.username === username && user.password === password);
+            const data = await response.json(); 
 
-        if (foundUser) {
-            // Login bem-sucedido
-            localStorage.setItem('isLoggedIn', 'true'); 
-            window.location.href = 'index.html'; 
-        } else {
-            // Login falhou
-            errorMessage.textContent = 'Usuário ou senha incorretos.';
+            if (response.ok) { 
+      
+      
+                localStorage.setItem('token', data.token); 
+                localStorage.setItem('isLoggedIn', 'true'); 
+
+                // Redireciona para a página principal ou de livros
+                window.location.href = 'index.html'; 
+            } else { 
+                errorMessage.textContent = data.message || 'Erro no login. Verifique seu usuário e senha.';
+                errorMessage.classList.add('visible');
+                console.error('Erro de resposta do servidor:', data);
+            }
+        } catch (error) { 
+            errorMessage.textContent = 'Erro de conexão ou servidor. Tente novamente mais tarde.';
             errorMessage.classList.add('visible');
+            console.error('Erro na requisição de login:', error);
         }
     });
 });
