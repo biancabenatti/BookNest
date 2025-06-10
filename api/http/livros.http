@@ -1,53 +1,112 @@
 # API REST de Livros
 
-@baseURL = https://book-nest-hhh.vercel.app/api/livros
-@id = 67f473c264bfbda4d0c6d1d9
+# Variáveis para fácil alteração:
+@baseURL = http://localhost:3000/api
+@id = 684837a68b49cc5a4a34e0c5
+@categoria = ficcao 
+@token = QjJkMjcxM2Q2YzVjMzY3YjM2NzYxYjU2YTRmNzU4ZTM0MjkwZTJhNDQzMjE4NzYzMzgxYTYwNjQ3NDc1NjE4MjQ3Nzc4MTQ1NzQzNjE1NDk5MDY1Mjk4MDQ1MDA4NzE2NzI0MTk1MzU1MjUzNA
 
 ###
-# GET - Buscar todos os livros
-GET {{baseURL}}
+# 1. Teste de Acesso a Rota Protegida (COM TOKEN - DEVE FUNCIONAR)
+# Endpoint: /api/livros
+# Método: GET
+# Deve retornar: 200 OK e a lista de livros (pode ser vazia).
+GET {{baseURL}}/livros
 Content-Type: application/json
-
-# GET - Buscar livro por ID
-GET {{baseURL}}/{{id}}
-Content-Type: application/json
-
-###
-# GET - Buscar livros por Categoria
-GET {{baseURL}}/categoria/{{categoria}}
-Content-Type: application/json
+Authorization: Bearer {{token}}
 
 ###
-# POST - Criar um novo livro
-POST {{baseURL}}
+# 2. Teste de Busca de Livro por ID (COM TOKEN - DEVE FUNCIONAR)
+# Endpoint: /api/livros/:id
+# Método: GET
+GET {{baseURL}}/livros/{{id}}
 Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+# 3. Teste de Busca de Livros por Categoria (COM TOKEN - DEVE FUNCIONAR)
+# Endpoint: /api/livros?categoria=...
+# Método: GET
+# Deve retornar: 200 OK e a lista de livros da categoria especificada.
+GET {{baseURL}}/livros?categoria={{categoria}}
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+# 4. Teste de Criação de Livro (COM TOKEN - DEVE FUNCIONAR)
+# Endpoint: /api/livros
+# Método: POST
+# Deve retornar: 201 Created.
+POST {{baseURL}}/livros
+Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
-  "_id": "1234567",
-  "titulo": "Meu Livro Teste",
-  "avaliacao": 8.5,
-  "autor": "Fulano de Tal"
-  data_leitura: "2025-04-25",
-  descricao: "Uma épica história de fantasia que narra a jornada para destruir o Um Anel.",
-  categoria: "ficçao"
+  "titulo": "Meu Novo Livro Teste",
+  "avaliacao": 2,
+  "autor": "Autor da História",
+  "data_leitura": "2025-06-10",
+  "descricao": "Este é um livro de teste para verificar a funcionalidade da API.",
+  "categoria": "ficcao"
 }
 
 ###
-# PUT - Atualizar um livro existente
-PUT {{baseURL}}/{{id}}
+# 5. Teste de Atualização de Livro (COM TOKEN - DEVE FUNCIONAR)
+# Endpoint: /api/livros/:id
+# Método: PUT
+PUT {{baseURL}}/livros/{{id}}
 Content-Type: application/json
+Authorization: Bearer {{token}}
 
 {
-   "_id": "1234567",
-  "titulo": "Meu Livro Teste",
-  "avaliacao": 8.5,
-  "autor": "Fulano de Tal"
-  data_leitura: "2025-04-25",
-  descricao: "Uma épica história de fantasia que narra a jornada para destruir o Um Anel.",
-  categoria: "ficçao"
+  "titulo": "A Arte da Guerra (Edição Revisada)",
+  "avaliacao": 2,
+  "autor": "Sun Tzu",
+  "data_leitura": "2025-05-01", 
+  "descricao": "Uma nova descrição para o livro, agora com mais detalhes.",
+  "categoria": "filosofia"
 }
 
 ###
-# DELETE - Deletar um livro
-DELETE {{baseURL}}/{{id}}
+# 6. Teste de Deleção de Livro (COM TOKEN - DEVE FUNCIONAR)
+# Endpoint: /api/livros/:id
+# Método: DELETE
+DELETE {{baseURL}}/livros/{{id}}
 Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+# 7. Teste de Busca de Livros por Categoria Específica (COM TOKEN - DEVE FUNCIONAR)
+# Endpoint: /api/livros?categoria=ficcao
+# Método: GET
+# Deve retornar: 200 OK e a lista de livros da categoria 'ficcao'.
+GET {{baseURL}}/livros?categoria=ficcao
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+# 8. Teste de Busca de Livros por Ordem de Avaliação (Maior para Menor) (COM TOKEN - DEVE FUNCIONAR)
+# Endpoint: /api/livros?ordem=maior
+# Método: GET
+# Deve retornar: 200 OK e a lista de livros ordenada pela avaliação (maior primeiro).
+GET {{baseURL}}/livros?ordem=maior
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+# 9. Teste de Busca de Livros por Ordem de Avaliação (Menor para Maior) (COM TOKEN - DEVE FUNCIONAR)
+# Endpoint: /api/livros?ordem=menor
+# Método: GET
+# Deve retornar: 200 OK e a lista de livros ordenada pela avaliação (menor primeiro).
+GET {{baseURL}}/livros?ordem=menor
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+# 10. Teste de Busca de Livros por Categoria E Ordem (COM TOKEN - DEVE FUNCIONAR)
+# Endpoint: /api/livros?categoria=fantasia&ordem=maior
+# Método: GET
+# Deve retornar: 200 OK e a lista de livros da categoria 'ficcao' ordenada por avaliação (maior primeiro).
+GET {{baseURL}}/livros?categoria=fantasia&ordem=maior
+Content-Type: application/json
+Authorization: Bearer {{token}}

@@ -1,0 +1,100 @@
+# Variáveis para fácil alteração do base URL e do token JWT
+@baseUrl = http://localhost:3000/api
+@token = QjJkMjcxM2Q2YzVjMzY3YjM2NzYxYjU2YTRmNzU4ZTM0MjkwZTJhNDQzMjE4NzYzMzgxYTYwNjQ3NDc1NjE4MjQ3Nzc4MTQ1NzQzNjE1NDk5MDY1Mjk4MDQ1MDA4NzE2NzI0MTk1MzU1MjUzNA
+
+
+###
+# 1. Teste de Registro de Usuário
+# Endpoint: /api/auth/register
+# Método: POST
+# Deve retornar: 201 Created se sucesso, 409 Conflict se username já existe.
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+    "username": "usuario_teste1234",
+    "password": "senha_segura_123"
+}
+
+###
+# 2. Teste de Login de Usuário
+# Endpoint: /api/auth/login
+# Método: POST
+# Deve retornar: 200 OK e um token JWT válido.
+# IMPORTANTE: Copie o 'token' da resposta e cole no @token acima!
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+    "username": "usuario_teste1",
+    "password": "senha_segura_123"
+}
+
+###
+# 3. Teste de Acesso a Rota Protegida (SEM TOKEN - DEVE FALHAR)
+# Endpoint: /api/livros
+# Método: GET
+# Deve retornar: 401 Unauthorized ou 403 Forbidden.
+GET {{baseUrl}}/livros
+Content-Type: application/json
+
+###
+# 4. Teste de Acesso a Rota Protegida (COM TOKEN - DEVE FUNCIONAR)
+# Endpoint: /api/livros
+# Método: GET
+# Deve retornar: 200 OK e a lista de livros (pode ser vazia).
+GET {{baseUrl}}/livros
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+
+###
+# 5. Teste de Criação de Livro (COM TOKEN - DEVE FUNCIONAR)
+# Endpoint: /api/livros
+# Método: POST
+# Deve retornar: 201 Created.
+POST {{baseUrl}}/livros
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "_id": "1234567",
+  "titulo": "Meu Livro Teste",
+  "avaliacao": 2,
+  "autor": "Fulano de Tal",
+  "data_leitura": "2025-04-25",
+  "descricao": "Uma épica história de fantasia que narra a jornada para destruir o Um Anel.",
+  "categoria": "ficçao"
+}
+
+###
+# 6. Teste de Busca de Livro por ID (COM TOKEN - DEVE FUNCIONAR)
+# Endpoint: /api/livros/:id
+# Método: GET
+# Substitua o ID pelo ID real de um livro que você criou ou que existe no DB.
+GET {{baseUrl}}/livros/684837a68b49cc5a4a34e0c5
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+###
+# 7. Teste de Atualização de Livro (COM TOKEN - DEVE FUNCIONAR)
+# Endpoint: /api/livros/:id
+# Método: PUT
+PUT {{baseUrl}}/livros/684837a68b49cc5a4a34e0c5
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "titulo": "A Arte da Guerra (Edição Revisada)",
+    "avaliacao": 2,
+    "autor": "Sun Tzu"
+}
+
+###
+# 8. Teste de Deleção de Livro (COM TOKEN - DEVE FUNCIONAR)
+# Endpoint: /api/livros/:id
+# Método: DELETE
+# Substitua o ID pelo ID real de um livro que você quer deletar.
+DELETE {{baseUrl}}/livros/684837a68b49cc5a4a34e0c5
+Content-Type: application/json
+Authorization: Bearer {{token}}
