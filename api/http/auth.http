@@ -12,8 +12,8 @@ POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-    "username": "usuario_teste1234",
-    "password": "senha_segura_123"
+    "username": "usuario_1234",
+    "password": "senha_segura_12344"
 }
 
 ###
