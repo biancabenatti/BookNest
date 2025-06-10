@@ -2,41 +2,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     const errorMessage = document.getElementById('errorMessage');
 
-    loginForm.addEventListener('submit', async (event) => { 
+    loginForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
 
-        const username = loginForm.username.value;
+        const email = loginForm.email.value;
         const password = loginForm.password.value;
 
-        // Limpa mensagens anteriores
         errorMessage.classList.remove('visible');
         errorMessage.textContent = '';
 
         try {
-            // -- ADICIONE A REQUISIÇÃO PARA O BACKEND AQUI --
             const response = await fetch('https://book-nest-hhh.vercel.app/api/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ email: email, password: password }),
             });
 
-            const data = await response.json(); 
+            const data = await response.json();
 
-            if (response.ok) { 
-      
-      
+            if (response.ok) {
                 localStorage.setItem('token', data.token); 
-                localStorage.setItem('isLoggedIn', 'true'); 
-
-                // Redireciona para a página principal ou de livros
+                localStorage.setItem('isLoggedIn', 'true');
+                if (data.name) {
+                    localStorage.setItem('userName', data.name); 
+                }
+                if (data.email) {
+                    localStorage.setItem('userEmail', data.email);
+                }
+                
                 window.location.href = 'index.html'; 
-            } else { 
-                errorMessage.textContent = data.message || 'Erro no login. Verifique seu usuário e senha.';
+            } else {
+                errorMessage.textContent = data.message || 'Erro no login. Verifique seu e-mail e senha.';
                 errorMessage.classList.add('visible');
                 console.error('Erro de resposta do servidor:', data);
             }
-        } catch (error) { 
+        } catch (error) {
             errorMessage.textContent = 'Erro de conexão ou servidor. Tente novamente mais tarde.';
             errorMessage.classList.add('visible');
             console.error('Erro na requisição de login:', error);
