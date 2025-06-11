@@ -386,6 +386,7 @@ header {
     text-align: center;
     min-width: 200px;
     margin-top: 3.5rem;
+    margin-left: 1.1rem;
 }
 
 .livro-info-2 p {
@@ -408,7 +409,6 @@ header {
     font-size: 1rem;
     color: var(--secondary-dark);
     font-weight: 600;
-    padding: 0.4rem 0.8rem;
     border-radius: 0.7em;
     background-color: rgba(21, 124, 145, 0.05);
     text-decoration: none;
