@@ -46,7 +46,7 @@ function exibirLivros(livrosParaExibir = [], categoriaFiltro = '') {
                 <button class="edit-btn" onclick="editarDescricao('${livro._id}')"><i class="fa fa-edit"></i> Editar descrição</button>
             </div>
             <div class="livro-info-2">
-                <p><strong>Data de Leitura</strong></br>
+                <p><strong>Leitura: </strong></br>
                 ${livro.data_leitura ? formatDateBR(livro.data_leitura) : ''}</p>
                 <p><strong>Categoria:</strong> ${livro.categoria || ''}</p>
                 <div class="star-rating" data-titulo="${livro.titulo}" onclick="alterarEstrelas(event, '${livro.titulo}')">
