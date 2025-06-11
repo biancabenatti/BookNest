@@ -320,13 +320,14 @@ header {
     border-radius: 1.5rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 5px 15px rgba(0, 0, 0, 0.08);
     display: flex;
-    gap: 2rem;
+    gap: 1rem;
     align-items: flex-start;
     max-width: 800px;
     position: relative;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     overflow: hidden;
     border: 1px solid rgba(0, 0, 0, 0.04);
+    width: 100%;
 }
 
 .livro:hover {
@@ -341,7 +342,7 @@ header {
     text-align: left;
     padding-right: 0.8rem;
     border-right: 1px solid rgba(0, 0, 0, 0.08);
-    max-width: 800px;
+    max-width: 500px;
 }
 
 .livro-info h3 {
