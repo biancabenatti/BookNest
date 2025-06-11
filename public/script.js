@@ -1,23 +1,97 @@
-// Array para armazenar os livros
 let livros = [];
 
-// Função para carregar livros do localStorage e do backend
+const messageModal = document.createElement('div');
+messageModal.id = 'messageModal';
+messageModal.classList.add('custom-modal');
+messageModal.innerHTML = `
+    <div class="custom-modal-content">
+        <span class="custom-close-button">&times;</span>
+        <h2 id="messageModalTitle"></h2>
+        <p id="messageModalText"></p>
+        <button class="custom-modal-ok-button">OK</button>
+    </div>
+`;
+document.body.appendChild(messageModal);
+
+const messageModalTitle = document.getElementById('messageModalTitle');
+const messageModalText = document.getElementById('messageModalText');
+const messageModalCloseButton = messageModal.querySelector('.custom-close-button');
+const messageModalOkButton = messageModal.querySelector('.custom-modal-ok-button');
+
+function showMessage(title, message) {
+    messageModalTitle.innerText = title;
+    messageModalText.innerText = message;
+    messageModal.classList.add('is-visible');
+    return new Promise(resolve => {
+        messageModalOkButton.onclick = () => {
+            messageModal.classList.remove('is-visible');
+            resolve();
+        };
+        messageModalCloseButton.onclick = () => {
+            messageModal.classList.remove('is-visible');
+            resolve();
+        };
+    });
+}
+
+const confirmModal = document.createElement('div');
+confirmModal.id = 'confirmModal';
+confirmModal.classList.add('custom-modal');
+confirmModal.innerHTML = `
+    <div class="custom-modal-content">
+        <span class="custom-close-button">&times;</span>
+        <h2 id="confirmModalTitle">Confirmação</h2>
+        <p id="confirmModalText"></p>
+        <div class="custom-modal-buttons">
+            <button class="custom-modal-cancel-button">Cancelar</button>
+            <button class="custom-modal-confirm-button">Confirmar</button>
+        </div>
+    </div>
+`;
+document.body.appendChild(confirmModal);
+
+const confirmModalText = document.getElementById('confirmModalText');
+const confirmModalCloseButton = confirmModal.querySelector('.custom-close-button');
+const confirmModalCancelButton = confirmModal.querySelector('.custom-modal-cancel-button');
+const confirmModalConfirmButton = confirmModal.querySelector('.custom-modal-confirm-button');
+
+function showConfirmation(message) {
+    confirmModalText.innerText = message;
+    confirmModal.classList.add('is-visible');
+    return new Promise(resolve => {
+        confirmModalConfirmButton.onclick = () => {
+            confirmModal.classList.remove('is-visible');
+            resolve(true);
+        };
+        confirmModalCancelButton.onclick = () => {
+            confirmModal.classList.remove('is-visible');
+            resolve(false);
+        };
+        confirmModalCloseButton.onclick = () => {
+            confirmModal.classList.remove('is-visible');
+            resolve(false);
+        };
+    });
+}
+
 async function carregarLivros() {
     try {
-      const res = await fetch('https://book-nest-hhh.vercel.app/api/livros');
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      livros = data;
-      exibirLivros(livros);
+        const res = await fetch('https://book-nest-hhh.vercel.app/api/livros');
+        if (!res.ok) {
+            const errorData = await res.json();
+            throw new Error(errorData.message || `HTTP ${res.status}`);
+        }
+        const data = await res.json();
+        livros = data;
+        exibirLivros(livros);
     } catch (err) {
-      console.error('Erro ao carregar livros:', err);
+        console.error('Erro ao carregar livros:', err);
+        showMessage('Erro', 'Não foi possível carregar os livros: ' + err.message);
     }
-  }
+}
 
-// Chama a função para carregar livros ao iniciar a página
 carregarLivros();
 
-// Função para formatar datas no formato brasileiro
 function formatDateBR(isoString) {
     const d = new Date(isoString);
     const day = String(d.getDate()).padStart(2, '0');
@@ -26,7 +100,6 @@ function formatDateBR(isoString) {
     return `${day}-${month}-${year}`;
 }
 
-// Função para exibir livros na tela
 function exibirLivros(livrosParaExibir = [], categoriaFiltro = '') {
     const livrosLista = document.getElementById('livrosLista');
     livrosLista.innerHTML = '';
@@ -50,8 +123,8 @@ function exibirLivros(livrosParaExibir = [], categoriaFiltro = '') {
                 ${livro.data_leitura ? formatDateBR(livro.data_leitura) : ''}</p>
                 <p><strong>Categoria:</strong> ${livro.categoria || ''}</p>
                 <div class="star-rating" data-titulo="${livro.titulo}" onclick="alterarEstrelas(event, '${livro.titulo}')">
-                    ${[1,2,3,4,5].map(i=>`
-                        <i class="fa fa-star ${livro.avaliacao>=i?'checked':''}" data-estrela="${i}"></i>
+                    ${[1, 2, 3, 4, 5].map(i => `
+                        <i class="fa fa-star ${livro.avaliacao >= i ? 'checked' : ''}" data-estrela="${i}"></i>
                     `).join('')}
                 </div>
             </div>
@@ -63,10 +136,10 @@ function exibirLivros(livrosParaExibir = [], categoriaFiltro = '') {
         livrosLista.appendChild(livroDiv);
     });
 }
+
 function editarDescricao(idLivro) {
     const pDescricao = document.getElementById(`descricao-${idLivro}`);
-    
-    // Cria um input para editar
+
     const input = document.createElement('input');
     input.type = 'text';
     input.value = pDescricao.innerText.replace('Descrição:', '').trim();
@@ -78,83 +151,90 @@ function editarDescricao(idLivro) {
     input.style.borderRadius = '4px';
     input.style.fontSize = '14px';
     input.style.marginRight = '10px';
-    
 
-    // Botão de salvar
     const btnSalvar = document.createElement('button');
     btnSalvar.innerText = 'Salvar';
     btnSalvar.style.marginLeft = '10px';
     btnSalvar.classList.add('btn-salvar');
-    
+
     btnSalvar.onclick = async function() {
         const novaDescricao = document.getElementById(`input-descricao-${idLivro}`).value;
-    
+
+        if (novaDescricao.length < 10) {
+            showMessage('Erro de Validação', 'A descrição deve ter pelo menos 10 caracteres.');
+            return;
+        }
+
         try {
-            // Envia a nova descrição para o backend
-            await fetch(`https://book-nest-hhh.vercel.app/api/livros/${idLivro}`, {
+            const res = await fetch(`https://book-nest-hhh.vercel.app/api/livros/${idLivro}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ descricao: novaDescricao })
+                body: JSON.stringify({
+                    descricao: novaDescricao
+                })
             });
-    
-            // Atualiza a descrição na tela
-            pDescricao.innerHTML = `<strong>Descrição:</strong> ${novaDescricao}`;
-            
-            // Atualiza o livro no array 'livros' para refletir a mudança
-            const livro = livros.find(l => l._id === idLivro);
-            if (livro) {
-                livro.descricao = novaDescricao;  // Atualiza a descrição no array
+
+            if (res.ok) {
+                pDescricao.innerHTML = `<strong>Descrição:</strong> ${novaDescricao}`;
+
+                const livro = livros.find(l => l._id === idLivro);
+                if (livro) {
+                    livro.descricao = novaDescricao;
+                }
+
+                input.remove();
+                btnSalvar.remove();
+
+                showMessage('Sucesso!', 'Descrição atualizada com sucesso!');
+            } else {
+                const errorData = await res.json();
+                let errorMessage = 'Erro ao atualizar descrição.';
+                if (errorData.errors && errorData.errors.length > 0) {
+                    errorMessage = errorData.errors.map(err => err.msg).join('\n');
+                } else if (errorData.message) {
+                    errorMessage = errorData.message;
+                }
+                showMessage('Erro de Validação', errorMessage);
             }
-            
-            // Remove input e botão de salvar
-            input.remove();
-            btnSalvar.remove();
-            
-            alert('Descrição atualizada com sucesso!');
         } catch (error) {
             console.error('Erro ao atualizar descrição:', error);
-            alert('Erro ao atualizar descrição.');
+            showMessage('Erro', 'Erro ao conectar com o servidor para atualizar descrição.');
         }
     };
 
-    // Limpa o parágrafo e coloca o input + botão
     pDescricao.innerHTML = '';
     pDescricao.appendChild(input);
     pDescricao.appendChild(btnSalvar);
 }
 
-// Função para remover livro
 async function removerLivro(id) {
     const livro = livros.find(livro => livro._id === id);
     if (!livro) return;
 
-    const confirmDelete = confirm(`Tem certeza que deseja excluir o livro: "${livro.titulo}"?`);
+    const confirmDelete = await showConfirmation(`Tem certeza que deseja excluir o livro: "${livro.titulo}"?`);
     if (!confirmDelete) return;
 
     try {
-        const res = await fetch(`https://book-nest-hhh.vercel.app/api/livros/${livro._id}`,{
+        const res = await fetch(`https://book-nest-hhh.vercel.app/api/livros/${livro._id}`, {
             method: 'DELETE',
         });
 
         if (res.ok) {
             livros = livros.filter(l => l._id !== livro._id);
-            localStorage.setItem('livros', JSON.stringify(livros));
             exibirLivros(livros);
-            alert('Livro excluído com sucesso!');
+            showMessage('Sucesso!', 'Livro excluído com sucesso!');
         } else {
             const err = await res.json();
-            alert('Erro ao excluir: ' + err.message);
+            showMessage('Erro', 'Erro ao excluir: ' + (err.message || res.statusText));
         }
     } catch (err) {
         console.error('Erro ao excluir livro:', err);
-        alert('Erro ao conectar com o servidor.');
+        showMessage('Erro', 'Erro ao conectar com o servidor.');
     }
 }
 
-
-// Evento para salvar um novo livro
 document.getElementById('salvarLivro').addEventListener('click', async () => {
     const payload = {
         titulo: document.getElementById('titulo').value,
@@ -165,40 +245,47 @@ document.getElementById('salvarLivro').addEventListener('click', async () => {
         descricao: document.getElementById('descricao').value
     };
 
-    if (!payload.titulo || !payload.autor || isNaN(payload.avaliacao) 
-        || !payload.categoria || !payload.data_leitura || !payload.descricao) {
-        return alert('Preencha todos os campos');
-    }
-
     try {
         const res = await fetch('https://book-nest-hhh.vercel.app/api/livros', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify(payload)
         });
 
         let result = {};
-        if (res.headers.get('content-length') > 0) {
+        const contentLength = res.headers.get('content-length');
+        if (contentLength && parseInt(contentLength) > 0) {
             result = await res.json();
         }
 
         if (res.ok) {
-            alert('Livro salvo com sucesso!');
-            document.getElementById('modal').style.display = 'none';
+            showMessage('Sucesso!', 'Livro salvo com sucesso!');
+            document.getElementById('modal').classList.remove('is-visible');
 
-            livros.push(result);
-            localStorage.setItem('livros', JSON.stringify(livros));
-            exibirLivros(livros);
+            if (result && result._id) {
+                livros.push(result);
+                exibirLivros(livros);
+            } else {
+                carregarLivros();
+            }
+
         } else {
-            alert('Erro: ' + (result.message || res.statusText));
+            let errorMessage = 'Erro ao salvar livro.';
+            if (result.errors && result.errors.length > 0) {
+                errorMessage = result.errors.map(err => err.msg).join('\n');
+            } else if (result.message) {
+                errorMessage = result.message;
+            }
+            showMessage('Erro de Validação', errorMessage);
         }
     } catch (err) {
         console.error('Fetch error:', err);
-        alert('Erro ao salvar livro');
+        showMessage('Erro', 'Erro ao conectar com o servidor para salvar livro.');
     }
 });
 
-// Controle do modal
 const modal = document.getElementById("modal");
 const btnAbrir = document.getElementById("btnAdicionarLivro");
 const btnFechar = document.querySelector(".close");
@@ -224,27 +311,20 @@ window.addEventListener("click", (event) => {
     }
 });
 
-// Função de filtro/ordenação
 function aplicarFiltro(filtro) {
     let lista = [...livros];
 
-    // filtro de categoria (valor é "ficcao","ciencia" ou "historia")
     if (filtro === 'ficcao' || filtro === 'ciencia' || filtro === 'historia') {
         lista = lista.filter(l => l.categoria === filtro);
-    }
-    // ordenar por avaliação (valor é "maior" ou "menor")
-    else if (filtro === 'maior') {
+    } else if (filtro === 'maior') {
         lista.sort((a, b) => b.avaliacao - a.avaliacao);
-    }
-    else if (filtro === 'menor') {
+    } else if (filtro === 'menor') {
         lista.sort((a, b) => a.avaliacao - b.avaliacao);
     }
-    // se filtro for "", mostra tudo
 
     exibirLivros(lista);
 }
-// Evento para aplicar filtro quando selecionar no select
+
 document.getElementById('categoriaFiltro').addEventListener('change', e => {
     aplicarFiltro(e.target.value);
 });
-
