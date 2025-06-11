@@ -12,9 +12,9 @@ POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-    "name": "Nome Usuarioo",      
-    "email": "teste@email.com.brr",     
-    "password": "senha_segura_123444j"
+    "name": "Nome Usuarioro",      
+    "email": "teste@email.com.brrr",     
+    "password": "senha_segura_1234r44j"
 }
 
 ###

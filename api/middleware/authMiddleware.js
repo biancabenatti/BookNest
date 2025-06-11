@@ -6,15 +6,19 @@ const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET;
 
 router.post('/register', async (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password) return res.status(400).json({ message: 'Nome de usuário e senha são obrigatórios.' });
-  if (password.length < 6) return res.status(400).json({ message: 'A senha deve ter pelo menos 6 caracteres.' });
+  const { name, email, password } = req.body;
+
+  if (!name || !email || !password)
+    return res.status(400).json({ message: 'Nome, email e senha são obrigatórios.' });
+  
+  if (password.length < 6)
+    return res.status(400).json({ message: 'A senha deve ter pelo menos 6 caracteres.' });
 
   try {
-    await createUser(username, password);
+    await createUser(name, email, password);
     res.status(201).json({ message: 'Usuário registrado com sucesso!' });
   } catch (error) {
-    if (error.message === 'Nome de usuário já existe.') {
+    if (error.message === 'Email já existe.') {
       return res.status(409).json({ message: error.message });
     }
     console.error('Erro no registro:', error);
