@@ -17,23 +17,22 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const allowedOrigins = [
-    'http://localhost:5500',
-    'http://localhost:3000',
-    'https://book-nest-phi.vercel.app',
-    'https://book-nest-ldkaaogqa-biancas-projects-a0f326f1.vercel.app'
+  'http://localhost:3000',
+  'https://book-nest-hhh.vercel.app'
 ];
 
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Origem não permitida pelo CORS'));
-        }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Origem não permitida pelo CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 app.use(express.json());
 
 app.use('/', express.static(path.join(__dirname, '..', 'public')));
