@@ -1,9 +1,9 @@
-
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
-import { connectToDatabase } from './config/db.js'; // Apenas a função connectToDatabase
+
+import { connectToDatabase } from './config/db.js';
 import livrosRoutes from './routes/livros.js';
 import authRoutes from './routes/auth.js';
 import authMiddleware from './middleware/authMiddleware.js';
@@ -21,41 +21,43 @@ const allowedOrigins = [
   'https://book-nest-hhh.vercel.app'
 ];
 
+// ✅ CORS configurado corretamente (sem lançar erro 500)
 app.use(cors({
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Origem não permitida pelo CORS'));
+      callback(null, false); // Rejeita silenciosamente origens não permitidas
     }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
+// ✅ Middleware para JSON
 app.use(express.json());
 
+// ✅ Arquivos estáticos e rota inicial
 app.use('/', express.static(path.join(__dirname, '..', 'public')));
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
+  res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
 });
 
-
-connectToDatabase(app).then(() => {
-
-    app.use('/api/auth', authRoutes);
-    app.use('/api/livros', authMiddleware, livrosRoutes);
-
-    app.listen(PORT, () => {
-        console.log(`Servidor rodando na porta ${PORT}!`);
-    });
-}).catch(error => {
-    console.error("Falha ao conectar ao banco de dados e iniciar o servidor:", error);
-
-});
-
+// ✅ Middleware de erro (antes do listen)
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Algo deu errado no servidor!');
+  console.error(err.stack);
+  res.status(500).send('Algo deu errado no servidor!');
+});
+
+// ✅ Conexão com o banco e rotas protegidas
+connectToDatabase(app).then(() => {
+  app.use('/api/auth', authRoutes);
+  app.use('/api/livros', authMiddleware, livrosRoutes);
+
+  app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}!`);
+  });
+}).catch(error => {
+  console.error("Falha ao conectar ao banco de dados e iniciar o servidor:", error);
 });
