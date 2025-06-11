@@ -5,10 +5,8 @@
     --light-blue: #adc5cf;
     --off-white: #e0f0f5;
     --highlight-orange: #157c91;
-
     --font-outfit: "Outfit", sans-serif;
     --font-poiret: "Poiret One", sans-serif;
-
     --shadow-light: 0px 4px 10px rgba(0, 0, 0, 0.08);
     --shadow-medium: 0px 8px 20px rgba(0, 0, 0, 0.15);
     --shadow-hover: 0px 12px 28px rgba(0, 0, 0, 0.25);
@@ -61,7 +59,8 @@ ul {
     box-shadow: var(--shadow-medium);
 }
 
-.edit-btn, .delete-btn {
+.edit-btn,
+.delete-btn {
     font-family: var(--font-outfit);
     background: none;
     border: none;
@@ -107,7 +106,7 @@ ul {
     flex-direction: column;
 }
 
-.sidebar > .inner {
+.sidebar>.inner {
     display: flex;
     flex-direction: column;
     gap: 4rem;
@@ -714,26 +713,18 @@ footer {
         padding: 1.8rem;
         gap: 1.5rem;
     }
-
     .livro-info {
         padding-right: 0;
         border-right: none;
         width: 100%;
         margin-bottom: 1rem;
-        padding-right: 0; 
-        border-right: none;
-        width: 100%; 
-        margin-bottom: 1rem;
     }
-
     .livro-info h3 {
         font-size: 2rem;
     }
-
     .livro-info p.description {
         max-height: none;
     }
-
     .livro-info-2 {
         align-items: flex-start;
         text-align: left;
@@ -742,7 +733,6 @@ footer {
         width: 100%;
         gap: 0.6rem;
     }
-
     .livro-actions-wrapper {
         display: flex;
         justify-content: flex-end;
@@ -750,8 +740,8 @@ footer {
         margin-top: 1.5rem;
         gap: 1rem;
     }
-
-    .edit-btn, .delete-btn {
+    .edit-btn,
+    .delete-btn {
         position: static;
         font-size: 0.9rem;
         padding: 0.5rem 1rem;
@@ -762,12 +752,10 @@ footer {
         border-radius: 0.5em;
         padding: 0.5rem 0.8rem;
     }
-
     .star-rating {
         margin-top: 1rem;
         font-size: 1.8rem;
     }
-
     .modal-content {
         padding: 30px;
         max-width: 480px;
@@ -797,7 +785,7 @@ footer {
         box-shadow: none;
         padding-bottom: 1rem;
     }
-    .sidebar > .inner {
+    .sidebar>.inner {
         flex-direction: column;
         gap: 1.5rem;
         margin-top: 1rem;
@@ -822,7 +810,6 @@ footer {
         font-size: 0.85rem;
         padding: 0.2rem 0.6rem;
     }
-
     .container,
     #wrapper,
     #catalogo,
@@ -833,24 +820,21 @@ footer {
         padding: 1.5rem;
         box-sizing: border-box;
     }
-    
     header {
         margin-left: 0;
         width: 100%;
         padding: 1rem;
     }
-
     #intro h1 {
         font-size: 2.2rem;
     }
     #intro p {
         font-size: 1.1rem;
     }
-
-    #catalogo h2, .sobre h2 {
+    #catalogo h2,
+    .sobre h2 {
         font-size: 2rem;
     }
-
     .botoes-adicionais {
         flex-direction: column;
         align-items: center;
@@ -863,37 +847,31 @@ footer {
         font-size: 0.9rem;
         padding: 0.7rem 1.2rem;
     }
-
     .livro {
         padding: 1.5rem;
         width: 95%;
         gap: 1rem;
     }
-
     .livro-info h3 {
         font-size: 1.8rem;
     }
-
     .livro-info p {
         font-size: 0.95rem;
     }
-
     .livro-info-2 p {
         font-size: 0.9rem;
     }
-
-    .edit-btn, .delete-btn {
+    .edit-btn,
+    .delete-btn {
         font-size: 0.85rem;
         padding: 0.4rem 0.8rem;
     }
     .delete-btn {
         font-size: 1.4rem;
     }
-
     .star-rating .fa-star {
         font-size: 1.6rem;
     }
-
     .modal-content {
         padding: 25px;
         max-width: 95%;
@@ -921,15 +899,12 @@ footer {
     .livro {
         padding: 1.2rem;
     }
-
     .livro-info h3 {
         font-size: 1.6rem;
     }
-
     .livro-info p {
         font-size: 0.9rem;
     }
-
     .star-rating .fa-star {
         font-size: 1.4rem;
     }
@@ -938,7 +913,8 @@ footer {
         align-items: stretch;
         gap: 0.8rem;
     }
-    .edit-btn, .delete-btn {
+    .edit-btn,
+    .delete-btn {
         width: 100%;
         justify-content: center;
     }
