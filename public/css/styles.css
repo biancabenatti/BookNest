@@ -261,7 +261,7 @@ header {
     text-align: center;
     font-weight: 600;
     letter-spacing: 0.1em;
-    margin-bottom: 2rem;
+    margin-bottom: 0.5rem;
 }
 
 .botoes-adicionais {
@@ -320,9 +320,8 @@ header {
     border-radius: 1.5rem;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 5px 15px rgba(0, 0, 0, 0.08);
     display: flex;
-    gap: 2rem;
+    gap: 3.2rem;
     align-items: flex-start;
-    width: 90%;
     max-width: 1100px;
     position: relative;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
@@ -340,8 +339,9 @@ header {
     flex-direction: column;
     flex-grow: 1;
     text-align: left;
-    padding-right: 1.5rem;
+    padding-right: 0.8rem;
     border-right: 1px solid rgba(0, 0, 0, 0.08);
+    max-width: 800px;
 }
 
 .livro-info h3 {
@@ -382,10 +382,10 @@ header {
 .livro-info-2 {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    text-align: right;
+    align-items: center;
+    text-align: center;
     min-width: 200px;
-    margin-top: 5rem;
+    margin-top: 3.5rem;
 }
 
 .livro-info-2 p {
@@ -719,6 +719,10 @@ footer {
         border-right: none;
         width: 100%;
         margin-bottom: 1rem;
+        padding-right: 0; 
+        border-right: none;
+        width: 100%; 
+        margin-bottom: 1rem;
     }
 
     .livro-info h3 {
@@ -727,7 +731,6 @@ footer {
 
     .livro-info p.description {
         max-height: none;
-        -webkit-line-clamp: unset;
     }
 
     .livro-info-2 {
