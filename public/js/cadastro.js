@@ -46,12 +46,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ name: newName, email: newEmail, password: newPassword }),
             });
 
-            const data = await response.json();
+            let data;
+            try {
+                data = await response.json();
+            } catch (err) {
+        
+                const text = await response.text();
+                data = { message: text };
+            }
 
             if (response.ok) {
                 successMessage.textContent = data.message || 'Cadastro realizado com sucesso! Redirecionando para o login...';
                 successMessage.classList.add('visible');
-                cadastroForm.reset(); 
+                cadastroForm.reset();
 
                 setTimeout(() => {
                     window.location.href = 'login.html';
