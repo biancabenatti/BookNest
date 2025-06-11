@@ -31,3 +31,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+export default checkAuth; 
