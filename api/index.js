@@ -19,7 +19,8 @@ const PORT = process.env.PORT || 3000;
 const allowedOrigins = [
     'http://localhost:5500',
     'http://localhost:3000',
-    'https://book-nest-phi.vercel.app'
+    'https://book-nest-phi.vercel.app',
+    'https://book-nest-ldkaaogqa-biancas-projects-a0f326f1.vercel.app'
 ];
 
 app.use(cors({
