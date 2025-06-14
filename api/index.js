@@ -2,7 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
-
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from '../swaggerConfig.js'
 import { connectToDatabase } from './config/db.js';
 import livrosRoutes from './routes/livros.js';
 import authRoutes from './routes/auth.js';
@@ -61,3 +62,5 @@ connectToDatabase(app).then(() => {
 }).catch(error => {
   console.error("Falha ao conectar ao banco de dados e iniciar o servidor:", error);
 });
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
