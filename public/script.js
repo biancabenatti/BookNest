@@ -76,7 +76,15 @@ function showConfirmation(message) {
 
 async function carregarLivros() {
     try {
-        const res = await fetch('https://booknest-00je.onrender.com/api/livros');
+        const token = localStorage.getItem('token');
+
+        const res = await fetch('https://booknest-00je.onrender.com/api/livros', {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+
         if (!res.ok) {
             const errorData = await res.json();
             throw new Error(errorData.message || `HTTP ${res.status}`);
@@ -146,7 +154,6 @@ function editarDescricao(idLivro) {
     input.id = `input-descricao-${idLivro}`;
     input.style.width = '90%';
     input.style.padding = '8px';
-    input.style.width = '90%';
     input.style.border = '1px solid #ccc';
     input.style.borderRadius = '4px';
     input.style.fontSize = '14px';
@@ -166,10 +173,13 @@ function editarDescricao(idLivro) {
         }
 
         try {
+            const token = localStorage.getItem('token');
+
             const res = await fetch(`https://booknest-00je.onrender.com/api/livros/${idLivro}`, {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     descricao: novaDescricao
@@ -217,8 +227,13 @@ async function removerLivro(id) {
     if (!confirmDelete) return;
 
     try {
+        const token = localStorage.getItem('token');
+
         const res = await fetch(`https://booknest-00je.onrender.com/api/livros/${livro._id}`, {
             method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         });
 
         if (res.ok) {
@@ -246,10 +261,13 @@ document.getElementById('salvarLivro').addEventListener('click', async () => {
     };
 
     try {
+        const token = localStorage.getItem('token');
+
         const res = await fetch('https://booknest-00je.onrender.com/api/livros', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(payload)
         });
