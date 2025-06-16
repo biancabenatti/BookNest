@@ -20,19 +20,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify({ email: email, password: password }),
             });
 
-            const data = await response.json();
+            let data;
+            const contentType = response.headers.get('content-type') || '';
+
+            if (contentType.includes('application/json')) {
+                data = await response.json();
+            } else {
+                data = { message: await response.text() };
+            }
 
             if (response.ok) {
-                localStorage.setItem('token', data.token); 
+                localStorage.setItem('token', data.token);
                 localStorage.setItem('isLoggedIn', 'true');
                 if (data.name) {
-                    localStorage.setItem('userName', data.name); 
+                    localStorage.setItem('userName', data.name);
                 }
                 if (data.email) {
                     localStorage.setItem('userEmail', data.email);
                 }
-                
-                window.location.href = 'index.html'; 
+
+                window.location.href = 'index.html';
             } else {
                 errorMessage.textContent = data.message || 'Erro no login. Verifique seu e-mail e senha.';
                 errorMessage.classList.add('visible');
