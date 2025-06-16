@@ -76,7 +76,7 @@ function showConfirmation(message) {
 
 async function carregarLivros() {
     try {
-        const res = await fetch('https://book-nest-hhh.vercel.app/api/livros');
+        const res = await fetch('https://booknest-00je.onrender.com/api/livros');
         if (!res.ok) {
             const errorData = await res.json();
             throw new Error(errorData.message || `HTTP ${res.status}`);
@@ -166,7 +166,7 @@ function editarDescricao(idLivro) {
         }
 
         try {
-            const res = await fetch(`https://book-nest-hhh.vercel.app/api/livros/${idLivro}`, {
+            const res = await fetch(`https://booknest-00je.onrender.com/api/livros/${idLivro}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -217,7 +217,7 @@ async function removerLivro(id) {
     if (!confirmDelete) return;
 
     try {
-        const res = await fetch(`https://book-nest-hhh.vercel.app/api/livros/${livro._id}`, {
+        const res = await fetch(`https://booknest-00je.onrender.com/api/livros/${livro._id}`, {
             method: 'DELETE',
         });
 
@@ -246,7 +246,7 @@ document.getElementById('salvarLivro').addEventListener('click', async () => {
     };
 
     try {
-        const res = await fetch('https://book-nest-hhh.vercel.app/api/livros', {
+        const res = await fetch('https://booknest-00je.onrender.com/api/livros', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
