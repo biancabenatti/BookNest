@@ -13,6 +13,7 @@ document.getElementById('form-livro').addEventListener('submit', async (event) =
   }
 
   const token = localStorage.getItem('token') 
+  console.log('Token no envio do livro:', token);
 
   try {
     const response = await fetch('https://booknest-00je.onrender.com/api/livros', {
