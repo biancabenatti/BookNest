@@ -5,7 +5,7 @@
   "main": "api/index.js",
   "type": "module",
   "scripts": {
-    "test": "cross-env NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js --forceExit --detectOpenHandles",
+    "test": "cross-env NODE_ENV=test node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "start": "node ./api/index.js",
     "dev": "nodemon ./api/index.js"
   },
@@ -25,11 +25,8 @@
     "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.27.4",
-    "@babel/preset-env": "^7.27.2",
     "@jest/globals": "^30.0.0",
     "@types/jest": "^30.0.0",
-    "babel-jest": "^30.0.0",
     "cross-env": "^7.0.3",
     "jest": "^30.0.0",
     "mongodb-memory-server": "^10.1.4",

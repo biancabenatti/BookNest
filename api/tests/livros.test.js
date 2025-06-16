@@ -1,8 +1,12 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
+import { jest } from '@jest/globals';
 import request from 'supertest';
 import { MongoClient } from 'mongodb';
 import app from '../index.js';
-import dotenv from 'dotenv';
-dotenv.config();
+
+app.listen = jest.fn(); 
 
 let connection;
 let db;
@@ -14,11 +18,11 @@ beforeAll(async () => {
     useUnifiedTopology: true,
   });
   db = connection.db('biblioteca');
-  app.locals.db = db; 
+  app.locals.db = db;
 });
 
 afterAll(async () => {
-  await db.dropDatabase(); 
+  await db.dropDatabase();
   await connection.close();
 });
 
@@ -68,10 +72,4 @@ describe('API Livros - Testes CRUD (sem token)', () => {
     expect(response.statusCode).toBe(200);
     expect(response.body.message).toMatch(/removido/i);
   });
-});
-afterAll(() => {
-  
-  if (global.__MONGOCLIENT__) {
-    global.__MONGOCLIENT__.close();
-  }
 });

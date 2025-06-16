@@ -10,14 +10,14 @@ router.post('/register', async (req, res) => {
     
     const { name, email, password } = req.body;
 
-    // Validações básicas
+ 
     if (!name || !email || !password) {
         return res.status(400).json({ message: 'Nome, e-mail e senha são obrigatórios.' });
     }
     if (password.length < 6) {
         return res.status(400).json({ message: 'A senha deve ter pelo menos 6 caracteres.' });
     }
-    // Opcional: validação de formato de e-mail 
+  
     if (!email.includes('@') || !email.includes('.')) {
         return res.status(400).json({ message: 'Formato de e-mail inválido.' });
     }
@@ -25,7 +25,6 @@ router.post('/register', async (req, res) => {
     try {
         const db = req.app.locals.db; 
 
-        // Verifique se o e-mail já existe (e-mail será único)
         const existingUser = await db.collection('users').findOne({ email: email.toLowerCase() }); 
 
         if (existingUser) {
@@ -37,8 +36,8 @@ router.post('/register', async (req, res) => {
         // Inserir o novo usuário no banco de dados
         await db.collection('users').insertOne({ 
             name, 
-            email: email.toLowerCase(), // Salvar e-mail em minúsculas
-            password: hashedPassword // Salvar a senha criptografada
+            email: email.toLowerCase(), 
+            password: hashedPassword 
         });
 
         res.status(201).json({ message: 'Usuário registrado com sucesso!' });
@@ -52,10 +51,10 @@ router.post('/register', async (req, res) => {
 
 // Rota de Login
 router.post('/login', async (req, res) => {
-    // Agora esperamos 'email' e 'password'
+  
     const { email, password } = req.body;
 
-    // Validações básicas
+   
     if (!email || !password) {
         return res.status(400).json({ message: 'E-mail e senha são obrigatórios.' });
     }
@@ -63,23 +62,23 @@ router.post('/login', async (req, res) => {
     try {
         const db = req.app.locals.db; 
 
-        // Encontrar o usuário pelo e-mail
+   
         const user = await db.collection('users').findOne({ email: email.toLowerCase() });
 
         if (!user) {
-            return res.status(401).json({ message: 'Credenciais inválidas.' }); // E-mail não encontrado
+            return res.status(401).json({ message: 'Credenciais inválidas.' }); 
         }
 
         // Comparar a senha fornecida com a senha criptografada no banco de dados
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
-            return res.status(401).json({ message: 'Credenciais inválidas.' }); // Senha incorreta
+            return res.status(401).json({ message: 'Credenciais inválidas.' }); 
         }
 
         // Gerar o token JWT
         const token = jwt.sign(
-            { id: user._id, email: user.email, name: user.name }, // Adicionar 'name' ao payload do token
+            { id: user._id, email: user.email, name: user.name }, 
             JWT_SECRET,
             { expiresIn: '1h' } // Token expira em 1 hora
         );

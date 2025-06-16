@@ -1,4 +1,4 @@
-// controllers/livros.js (ou livrosController.js, dependendo do nome do seu arquivo)
+
 import { ObjectId } from 'mongodb';
 
 // GET - Com filtro e sem filtro
@@ -96,17 +96,15 @@ export const updateLivro = async (req, res) => {
         }
 
         const camposAtualizar = {};
-        // Adiciona campos ao objeto de atualização apenas se eles existirem no body
         if (req.body.titulo !== undefined) camposAtualizar.titulo = req.body.titulo;
         if (req.body.avaliacao !== undefined) camposAtualizar.avaliacao = req.body.avaliacao;
         if (req.body.autor !== undefined) camposAtualizar.autor = req.body.autor;
-        // Converte data_leitura para Date se for fornecido
         if (req.body.data_leitura !== undefined) camposAtualizar.data_leitura = req.body.data_leitura ? new Date(req.body.data_leitura) : null;
         if (req.body.descricao !== undefined) camposAtualizar.descricao = req.body.descricao;
-        if (req.body.categoria !== undefined) camposAtualizar.categoria = req.body.categoria; // Adicionado categoria para atualização
+        if (req.body.categoria !== undefined) camposAtualizar.categoria = req.body.categoria; 
 
         const result = await db.collection('livros').updateOne(
-            { _id: objectId }, // Usa o ObjectId convertido
+            { _id: objectId }, 
             { $set: camposAtualizar }
         );
 
@@ -132,7 +130,6 @@ export const deleteLivro = async (req, res) => {
         const { id } = req.params;
         const db = req.app.locals.db;
 
-        // **CORREÇÃO CRÍTICA AQUI:** Converte a string 'id' para ObjectId
         let objectId;
         try {
             objectId = new ObjectId(id);
