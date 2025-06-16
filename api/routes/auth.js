@@ -49,39 +49,6 @@ router.post('/register', async (req, res) => {
     }
 });
 
-/**
- * @swagger
- * /auth/register:
- *   post:
- *     summary: Registra um novo usuário
- *     tags: [Autenticação]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - name
- *               - email
- *               - password
- *             properties:
- *               name:
- *                 type: string
- *                 example: Nome Usuário
- *               email:
- *                 type: string
- *                 example: teste@email.com
- *               password:
- *                 type: string
- *                 example: senha_segura_123
- *     responses:
- *       201:
- *         description: Usuário criado com sucesso
- *       409:
- *         description: E-mail já registrado
- */
-
 
 // Rota de Login
 router.post('/login', async (req, res) => {
@@ -124,35 +91,6 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ message: 'Erro interno do servidor ao fazer login.' });
     }
 });
-
-/**
- * @swagger
- * /auth/login:
- *   post:
- *     summary: Autentica um usuário e retorna um token JWT
- *     tags: [Autenticação]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
- *             properties:
- *               email:
- *                 type: string
- *                 example: teste@email.com
- *               password:
- *                 type: string
- *                 example: senha_segura_123
- *     responses:
- *       200:
- *         description: Login bem-sucedido com retorno do token
- *       401:
- *         description: Credenciais inválidas
- */
 
 
 export default router;

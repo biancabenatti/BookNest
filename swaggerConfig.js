@@ -23,7 +23,7 @@ const swaggerDefinition = {
   ],
   servers: [
     {
-      url: 'https://book-nest-hhh.vercel.app/api',
+      url: 'https://booknest-s381.onrender.com/api',
     },
   ],
 };
