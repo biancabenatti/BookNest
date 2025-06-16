@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 3000;
 
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://booknest-00je.onrender.com',
+  'https://book-nest-hhh.vercel.app',
 ];
 
 
@@ -27,6 +27,7 @@ app.use(cors({
   origin: allowedOrigins,
   credentials: true,
 }));
+
 // ✅ Middleware para JSON
 app.use(express.json());
 

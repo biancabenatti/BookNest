@@ -78,7 +78,7 @@ async function carregarLivros() {
     try {
         const token = localStorage.getItem('token');
 
-        const res = await fetch('https://booknest-00je.onrender.com/api/livros', {
+        const res = await fetch('https://book-nest-hhh.vercel.app/api/livros', {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -175,7 +175,7 @@ function editarDescricao(idLivro) {
         try {
             const token = localStorage.getItem('token');
 
-            const res = await fetch(`https://booknest-00je.onrender.com/api/livros/${idLivro}`, {
+            const res = await fetch(`https://book-nest-hhh.vercel.app/api/livros/${idLivro}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -229,7 +229,7 @@ async function removerLivro(id) {
     try {
         const token = localStorage.getItem('token');
 
-        const res = await fetch(`https://booknest-00je.onrender.com/api/livros/${livro._id}`, {
+        const res = await fetch(`https://book-nest-hhh.vercel.app/api/livros/${livro._id}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -263,7 +263,7 @@ document.getElementById('salvarLivro').addEventListener('click', async () => {
     try {
         const token = localStorage.getItem('token');
 
-        const res = await fetch('https://booknest-00je.onrender.com/api/livros', {
+        const res = await fetch('https://book-nest-hhh.vercel.app/api/livros', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
