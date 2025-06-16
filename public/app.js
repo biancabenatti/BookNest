@@ -8,15 +8,18 @@ document.getElementById('form-livro').addEventListener('submit', async (event) =
     titulo: form.titulo.value,
     avaliacao: parseFloat(form.avaliacao.value),
     autor: form.autor.value,
-    data_leitura: form.dataLeitura.value,     
-    descricao: form.descricao.value         
+    data_leitura: form.dataLeitura.value,
+    descricao: form.descricao.value
   }
+
+  const token = localStorage.getItem('token') 
 
   try {
     const response = await fetch('https://booknest-00je.onrender.com/api/livros', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`    
       },
       body: JSON.stringify(data)
     })
@@ -32,5 +35,3 @@ document.getElementById('form-livro').addEventListener('submit', async (event) =
     console.error(err)
   }
 })
-
-

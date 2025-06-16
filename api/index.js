@@ -22,10 +22,11 @@ const allowedOrigins = [
   'https://booknest-00je.onrender.com',
 ];
 
-app.use(cors({
-  origin: '*',
-}));
 
+app.use(cors({
+  origin: allowedOrigins,
+  credentials: true,
+}));
 // ✅ Middleware para JSON
 app.use(express.json());
 
