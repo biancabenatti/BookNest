@@ -18,19 +18,20 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const allowedOrigins = [
-  'http://localhost:3000',          
-  'https://book-nest-hhh.vercel.app',   
+  'http://localhost:3000',
+  'https://book-nest-hhh.vercel.app',
 ];
 
 app.use(cors({
-  origin: function(origin, callback) {
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
 
-    if(!origin) return callback(null, true);
-    if(allowedOrigins.indexOf(origin) === -1) {
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
       const msg = 'O CORS não permite acesso desta origem.';
       return callback(new Error(msg), false);
     }
-    return callback(null, true);
   },
   credentials: true,
 }));
