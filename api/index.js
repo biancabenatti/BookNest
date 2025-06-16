@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 3000;
 
 const allowedOrigins = [
   'http://localhost:3000',          
-  'https://seu-site.vercel.app',   
+  'https://book-nest-hhh.vercel.app',   
 ];
 
 app.use(cors({
