@@ -7,8 +7,11 @@ import {
   deleteLivro
 } from '../controllers/livros.js'
 import { validateLivro } from '../middleware/validation.js'
+import authMiddleware from '../middleware/authMiddleware.js'  
 
 const router = express.Router()
+
+router.use(authMiddleware)  
 
 // GET todos os livros
 router.get('/', getLivros)

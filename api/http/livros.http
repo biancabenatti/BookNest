@@ -1,10 +1,10 @@
 # API REST de Livros
 
 # Variáveis para fácil alteração:
-@baseURL = http://localhost:3000/api
-@id = 680fc9cd1b63f517fd252990
-@categoria = ficcao 
-@token=QjJkMjcxM2Q2YzVjMzY3YjM2NzYxYjU2YTRmNzU4ZTM0MjkwZTJhNDQzMjE4NzYzMzgxYTYwNjQ3NDc1NjE4MjQ3Nzc4MTQ1NzQzNjE1NDk5MDY1Mjk4MDQ1MDA4NzE2NzI0MTk1MzU1MjUzNA
+@baseURL=http://localhost:3000/api
+@id=684994939019bc10fb30724c
+@categoria=ficcao 
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NTAyOWY1MTIzNjY5MTlkOGMyZjRkYiIsImVtYWlsIjoidGVzdEBlbWFpbC5jb20uYnJyciIsIm5hbWUiOiJOb21lICIsImlhdCI6MTc1MDA4NDcyNCwiZXhwIjoxNzUwMDg4MzI0fQ.V0NqA-9SHN_aqZbUINvwP2tjci4MnnMEJsnlP3fhjsA
 
 ###
 # 1. Teste de Acesso a Rota Protegida (COM TOKEN - DEVE FUNCIONAR)
