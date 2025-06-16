@@ -3,7 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
 import swaggerUi from 'swagger-ui-express';
-import swaggerSpec from '../swaggerConfig.js'
+import swaggerFile from '../swagger-output.js' 
 import { connectToDatabase } from './config/db.js';
 import livrosRoutes from './routes/livros.js';
 import authRoutes from './routes/auth.js';
@@ -46,6 +46,7 @@ app.use((err, req, res, next) => {
 
 // ✅ Conexão com o banco e rotas protegidas
 connectToDatabase(app).then(() => {
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerFile));
   app.use('/api/auth', authRoutes);
   app.use('/api/livros', authMiddleware, livrosRoutes);
 
@@ -56,5 +57,5 @@ connectToDatabase(app).then(() => {
   console.error("Falha ao conectar ao banco de dados e iniciar o servidor:", error);
 });
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
 export default app;

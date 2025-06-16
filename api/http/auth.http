@@ -1,6 +1,6 @@
 # Variáveis para fácil alteração do base URL e do token JWT
 @baseUrl=http://localhost:3000/api
-@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NTA0NzhhZmRkNmY5MjBkNDcwMDMyOSIsImVtYWlsIjoidGVzdEBlbWFpbC5jb20uYnJyciIsIm5hbWUiOiJOb21lICIsImlhdCI6MTc1MDA5MTY2MywiZXhwIjoxNzUwMDk1MjYzfQ.ryYw7HCZYtQwT4caXpgeWenBkNzEaQ7rwaQiHAaM13k
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NTA2MTA2MGM0OTZiMjljYWNhOTk4ZiIsImVtYWlsIjoidGVzdGUwMUBlbWFpbC5jb20uYnIiLCJuYW1lIjoiTm9tZSAiLCJpYXQiOjE3NTAwOTgyMzIsImV4cCI6MTc1MDEwMTgzMn0.8EybVa3McYc8DZxO80MiFViO1lP3igQYzQEVUNsY55c
 
 
 ###
@@ -26,7 +26,7 @@ POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-    "email": "test@email.com.brrr",    
+    "email": "teste01@email.com.br",    
     "password": "senha_segura"
 }
 
