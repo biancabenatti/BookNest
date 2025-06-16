@@ -47,12 +47,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             let data;
-            try {
+            const contentType = response.headers.get('content-type') || '';
+
+            if (contentType.includes('application/json')) {
                 data = await response.json();
-            } catch (err) {
-        
-                const text = await response.text();
-                data = { message: text };
+            } else {
+                data = { message: await response.text() };
             }
 
             if (response.ok) {
