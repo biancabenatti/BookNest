@@ -64,3 +64,4 @@ connectToDatabase(app).then(() => {
 });
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+export default app;

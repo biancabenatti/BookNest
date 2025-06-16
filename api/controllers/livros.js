@@ -1,11 +1,11 @@
 // controllers/livros.js (ou livrosController.js, dependendo do nome do seu arquivo)
-import { ObjectId } from 'mongodb'; 
+import { ObjectId } from 'mongodb';
 
 // GET - Com filtro e sem filtro
 export const getLivros = async (req, res) => {
     try {
         const db = req.app.locals.db;
-        const { categoria, ordem } = req.query; 
+        const { categoria, ordem } = req.query;
 
         const filtro = {};
         const options = {};
@@ -15,15 +15,15 @@ export const getLivros = async (req, res) => {
         }
 
         if (ordem === 'maior') {
-            options.sort = { avaliacao: -1 }; 
+            options.sort = { avaliacao: -1 };
         } else if (ordem === 'menor') {
-            options.sort = { avaliacao: 1 }; 
+            options.sort = { avaliacao: 1 };
         }
 
         const livros = await db.collection('livros').find(filtro, options).toArray();
         res.status(200).json(livros);
     } catch (error) {
-        
+
         console.error('Erro ao buscar livros:', error);
         res.status(500).json({ error: true, message: 'Erro interno do servidor ao buscar livros.' });
     }
@@ -35,12 +35,12 @@ export const getLivrosById = async (req, res) => {
         const { id } = req.params;
         const db = req.app.locals.db;
 
-        
+
         let objectId;
         try {
-            objectId = new ObjectId(id); 
+            objectId = new ObjectId(id);
         } catch (error) {
-           
+
             return res.status(400).json({ error: true, message: 'ID de livro inválido.' });
         }
 
@@ -59,22 +59,22 @@ export const getLivrosById = async (req, res) => {
 // POST - Criar novo livro
 export const createLivro = async (req, res) => {
     try {
-        const { titulo, avaliacao, autor, data_leitura, descricao, categoria } = req.body; 
+        const { titulo, avaliacao, autor, data_leitura, descricao, categoria } = req.body;
         const db = req.app.locals.db;
 
         const novoLivro = {
             titulo,
             avaliacao,
             autor,
-          
-            data_leitura: data_leitura ? new Date(data_leitura) : null, 
+
+            data_leitura: data_leitura ? new Date(data_leitura) : null,
             descricao,
-            categoria 
+            categoria
         };
 
         const result = await db.collection('livros').insertOne(novoLivro);
-   
-        res.status(201).json({ _id: result.insertedId, ...novoLivro }); 
+
+        res.status(201).json({ _id: result.insertedId, ...novoLivro });
     } catch (error) {
         console.error('Erro ao criar livro:', error);
         res.status(500).json({ error: true, message: 'Erro interno do servidor ao inserir o livro.' });
@@ -87,7 +87,7 @@ export const updateLivro = async (req, res) => {
         const { id } = req.params;
         const db = req.app.locals.db;
 
-        
+
         let objectId;
         try {
             objectId = new ObjectId(id);
@@ -114,7 +114,12 @@ export const updateLivro = async (req, res) => {
             return res.status(404).json({ error: true, message: 'Livro não encontrado para atualização.' });
         }
 
-        res.status(200).json({ message: 'Livro atualizado com sucesso!' });
+        const livroAtualizado = await db.collection('livros').findOne({ _id: objectId });
+
+        res.status(200).json({
+            message: 'Livro atualizado com sucesso!',
+            livro: livroAtualizado
+        });
     } catch (error) {
         console.error('Erro ao atualizar livro:', error);
         res.status(500).json({ error: true, message: 'Erro interno do servidor ao atualizar o livro.' });
@@ -135,7 +140,7 @@ export const deleteLivro = async (req, res) => {
             return res.status(400).json({ error: true, message: 'ID de livro inválido para exclusão.' });
         }
 
-        const result = await db.collection('livros').deleteOne({ _id: objectId }); 
+        const result = await db.collection('livros').deleteOne({ _id: objectId });
         if (result.deletedCount === 0) {
             return res.status(404).json({ error: true, message: 'Livro não encontrado para exclusão.' });
         }
