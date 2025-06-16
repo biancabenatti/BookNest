@@ -23,17 +23,7 @@ const allowedOrigins = [
 ];
 
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    } else {
-      const msg = 'O CORS não permite acesso desta origem.';
-      return callback(new Error(msg), false);
-    }
-  },
-  credentials: true,
+  origin: '*',
 }));
 
 // ✅ Middleware para JSON
